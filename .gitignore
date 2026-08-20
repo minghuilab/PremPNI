@@ -1,0 +1,10 @@
+# Build-only artifacts contain large third-party and PremPNI model weights.
+models/
+runtime-env.tar.gz
+*.tar
+*.tar.gz
+build/
+output/
+__pycache__/
+*.py[cod]
+.pytest_cache/

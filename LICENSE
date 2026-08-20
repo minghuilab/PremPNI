@@ -1,0 +1,35 @@
+PremPNI Academic Non-Commercial License
+Version 1.0, 2026
+
+Copyright (c) 2026 Weikang Sun. All rights reserved.
+
+Permission is granted, free of charge, to academic and non-profit research
+institutions to use, reproduce, and modify the PremPNI software and original
+PremPNI model weights solely for non-commercial research, teaching, and
+evaluation, subject to the following conditions:
+
+1. This copyright notice and license must be retained in all copies or
+   substantial portions of the software.
+2. PremPNI and its authors must be acknowledged in publications, reports, and
+   other works that use PremPNI. Citation details will be added after the
+   associated article is published.
+3. Commercial use is prohibited without prior written permission from the
+   copyright holder. Commercial use includes use for commercial services,
+   contract research for a commercial entity, product development, and any
+   activity intended primarily for commercial advantage or monetary
+   compensation.
+4. Redistribution of the original PremPNI model weights, whether separately or
+   as part of another container or software package, requires prior written
+   permission from the copyright holder.
+5. Third-party software and model assets bundled with or used by PremPNI remain
+   subject to their respective licenses. See THIRD_PARTY_NOTICES.md.
+
+THE SOFTWARE AND MODEL WEIGHTS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO
+EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE
+SOFTWARE, MODEL WEIGHTS, OR THEIR USE.
+
+For commercial licensing or other permissions, contact:
+20204021010@stu.suda.edu.cn

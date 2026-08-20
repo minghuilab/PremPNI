@@ -1,0 +1,10 @@
+.git
+.gitignore
+output
+build
+**/__pycache__
+**/*.pyc
+**/*.bak*
+src/**/outputs
+src/**/validation
+src/.pytest_cache
