@@ -11,13 +11,6 @@ image contains the embedding models and the two final PremPNI ensembles:
 - PremPDI2: three Protein-DNA MLP predictors combined by arithmetic mean;
 - PremPRI2: three Protein-RNA MLP predictors combined by arithmetic mean.
 
-## Authors
-
-Weikang Sun  
-Minghui Li Research Group  
-School of Biology & Basic Medical Sciences, Soochow University  
-Contact: 20204021010@stu.suda.edu.cn
-
 ## Requirements
 
 - Linux x86_64;
