@@ -43,7 +43,7 @@ the token directly in shell history:
 export CR_PAT='YOUR_GITHUB_TOKEN'
 echo "$CR_PAT" | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
 unset CR_PAT
-docker pull ghcr.io/minghuilab/prempni:v0.1.0
+docker pull ghcr.io/minghuilab/prempni:v0.1.1
 ```
 
 ## Protein-DNA example
@@ -52,7 +52,7 @@ docker pull ghcr.io/minghuilab/prempni:v0.1.0
 mkdir -p output
 docker run --rm --gpus all \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.1.0 \
+  ghcr.io/minghuilab/prempni:v0.1.1 \
   --complex-type dna \
   --sample-id DNA_demo \
   --protein-sequence MKTAYIAKQRQISFVKSHFSRQDILDLIC \
@@ -70,7 +70,7 @@ docker run --rm --gpus all \
 mkdir -p output
 docker run --rm --gpus all \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.1.0 \
+  ghcr.io/minghuilab/prempni:v0.1.1 \
   --complex-type rna \
   --sample-id RNA_demo \
   --protein-sequence MKTAYIAKQRQISFVKSHFSRQDILDLIC \
@@ -138,8 +138,8 @@ Dockerfile, generates `MODEL_MANIFEST.sha256`, and runs:
 
 ```bash
 docker build \
-  --build-arg PREMPNI_VERSION=0.1.0 \
-  -t ghcr.io/minghuilab/prempni:v0.1.0 \
+  --build-arg PREMPNI_VERSION=0.1.1 \
+  -t ghcr.io/minghuilab/prempni:v0.1.1 \
   -t ghcr.io/minghuilab/prempni:latest .
 ```
 

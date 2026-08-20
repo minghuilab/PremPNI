@@ -1,6 +1,6 @@
 FROM nvidia/cuda:11.6.1-base-ubuntu20.04
 
-ARG PREMPNI_VERSION=0.1.0
+ARG PREMPNI_VERSION=0.1.1
 
 LABEL org.opencontainers.image.title="PremPNI" \
       org.opencontainers.image.description="Sequence-based prediction of mutation effects on protein-DNA and protein-RNA interactions" \

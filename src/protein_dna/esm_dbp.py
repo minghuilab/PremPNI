@@ -7,7 +7,6 @@ import argparse
 import os
 import json
 import re
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Union
@@ -217,7 +216,6 @@ class ESMDBPEmbedder:
             alphabet=self.alphabet,
         )
 
-        print(f"正在加载 ESM-DBP 权重：{checkpoint_path}", file=sys.stderr)
         state_dict: Dict[str, torch.Tensor] = torch.load(
             checkpoint_path,
             map_location="cpu",

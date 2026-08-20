@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import sys
 from pathlib import Path
 from typing import Dict, Sequence, Union
 
@@ -55,10 +54,6 @@ class HyenaDNAEmbedder:
         if not checkpoint.is_file():
             raise FileNotFoundError(f"找不到HyenaDNA权重：{checkpoint}")
 
-        print(
-            f"正在加载 {MODEL_NAME} 到 {self.device}...",
-            file=sys.stderr,
-        )
         self.model = HyenaDNAPreTrainedModel.from_pretrained(
             str(self.checkpoint_root),
             MODEL_NAME,
