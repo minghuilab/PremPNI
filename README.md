@@ -15,19 +15,12 @@ inputs.
 
 ## PremPNI Installation and Usage Instructions
 
-### 1. Download the Docker image
+### 1. Download the public Docker image
 
-Ask the repository owner for access to the private repository and the private
-GitHub Container Registry package. Create a GitHub token with `read:packages`,
-then authenticate without placing the token directly in shell history:
+The PremPNI Docker image is publicly available from the GitHub Container
+Registry. No GitHub account or access token is required to pull the image:
 
 ```bash
-read -s CR_PAT
-printf '%s' "$CR_PAT" | docker login ghcr.io \
-  -u YOUR_GITHUB_USERNAME \
-  --password-stdin
-unset CR_PAT
-
 docker pull ghcr.io/minghuilab/prempni:v0.1.1
 ```
 
@@ -48,7 +41,6 @@ Input rules:
 - The reference residue in the mutation must match the protein sequence.
 - DNA accepts `A`, `C`, `G`, and `T`.
 - RNA accepts `A`, `C`, `G`, and `U`.
-- Chain identifiers may contain letters, digits, `.`, `_`, and `-`.
 - Every nucleic-acid chain must be supplied in the 5-prime to 3-prime direction.
 - Repeat `--chain` for multiple chains. For example, a two-chain DNA input
   uses `DNA_1=...` and `DNA_2=...`.
@@ -94,10 +86,7 @@ docker run --rm --gpus all \
   --mlp-device cuda:0
 ```
 
-The models are loaded sequentially, so one GPU can run both tasks. On a
-two-GPU system, `--na-device cuda:1` can place the nucleic-acid model on the
-second GPU. The ESM-2 3B protein stage automatically falls back to CPU when
-the requested GPU does not have enough VRAM.
+The models are loaded sequentially, so one GPU can run both tasks.
 
 ### 4. Output
 
@@ -145,21 +134,3 @@ Minghui Li Research Group in derived academic work.
 PremPNI is available for academic, non-commercial use only. See
 [LICENSE](LICENSE). Third-party components retain their original licenses; see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-## Maintainer build notes
-
-The Git repository intentionally excludes `models/` and `runtime-env.tar.gz`,
-because GitHub rejects files larger than 100 MB. The private GHCR image
-contains these assets. Before building, an authorized maintainer stages the
-verified model tree and packed Python runtime beside the Dockerfile, generates
-`MODEL_MANIFEST.sha256`, and runs:
-
-```bash
-docker build \
-  --build-arg PREMPNI_VERSION=0.1.1 \
-  -t ghcr.io/minghuilab/prempni:v0.1.1 \
-  -t ghcr.io/minghuilab/prempni:latest .
-```
-
-Every release must pass one Protein-DNA and one Protein-RNA end-to-end smoke
-test before it is pushed.
