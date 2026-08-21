@@ -1,48 +1,69 @@
 # PremPNI
 
-PremPNI predicts mutation-induced binding-affinity changes for protein-DNA and
-protein-RNA interactions directly from sequence. The input consists of a
-wild-type protein sequence, one or more nucleic-acid chains, and a single-site
-protein mutation. No three-dimensional complex structure is required.
+## About
 
-This private repository accompanies the complete GPU-enabled Docker image. The
-image contains the embedding models and the two final PremPNI ensembles:
+PremPNI is a sequence-based predictor for mutation-induced changes in
+protein-DNA and protein-RNA interactions. It requires only a wild-type
+protein sequence, one or more nucleic-acid chains, and a single-site protein
+mutation. No three-dimensional complex structure is required.
 
-- PremPDI2: three Protein-DNA MLP predictors combined by arithmetic mean;
-- PremPRI2: three Protein-RNA MLP predictors combined by arithmetic mean.
+PremPNI predicts whether the mutation is **stabilizing** or **destabilizing**
+and quantitatively estimates the resulting change in binding affinity,
+reported as ΔΔG (kcal/mol). The Docker image includes the complete embedding
+and prediction workflow so that users can run PremPNI directly from sequence
+inputs.
 
-## Requirements
+## PremPNI Installation and Usage Instructions
 
-- Linux x86_64;
-- Docker Engine 24 or newer;
-- NVIDIA driver compatible with CUDA 11.7;
-- NVIDIA Container Toolkit;
-- at least 30 GB free disk space for the image and outputs;
-- at least 32 GB system RAM; 64 GB is recommended for Protein-RNA prediction;
-- an NVIDIA GPU with at least 8 GB VRAM for DNA prediction. A GPU with at
-  least 16 GB VRAM is recommended for RNA prediction; otherwise the ESM-2 3B
-  protein stage automatically falls back to CPU and runs more slowly.
+### 1. Download the Docker image
 
-The models are loaded sequentially, so one GPU can run both tasks. Two GPUs may
-be selected independently with `--protein-device` and `--na-device`.
-
-## Obtain the private image
-
-Ask the repository owner for access to the private repository and package.
-Create a GitHub token with `read:packages`, then authenticate without placing
-the token directly in shell history:
+Ask the repository owner for access to the private repository and the private
+GitHub Container Registry package. Create a GitHub token with `read:packages`,
+then authenticate without placing the token directly in shell history:
 
 ```bash
-export CR_PAT='YOUR_GITHUB_TOKEN'
-echo "$CR_PAT" | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+read -s CR_PAT
+printf '%s' "$CR_PAT" | docker login ghcr.io \
+  -u YOUR_GITHUB_USERNAME \
+  --password-stdin
 unset CR_PAT
+
 docker pull ghcr.io/minghuilab/prempni:v0.1.1
 ```
 
-## Protein-DNA example
+The image contains all embedding models and final prediction weights. No
+additional model download or Hugging Face account is required.
+
+### 2. Input
+
+Each prediction requires:
+
+- one wild-type protein sequence;
+- one or more nucleic-acid chains;
+- one single-site protein mutation in one-based notation, such as `A10V`.
+
+Input rules:
+
+- Protein sequences may contain only the 20 standard amino-acid letters.
+- The reference residue in the mutation must match the protein sequence.
+- DNA accepts `A`, `C`, `G`, and `T`.
+- RNA accepts `A`, `C`, `G`, and `U`.
+- Chain identifiers may contain letters, digits, `.`, `_`, and `-`.
+- Every nucleic-acid chain must be supplied in the 5-prime to 3-prime direction.
+- Repeat `--chain` for multiple chains. For example, a two-chain DNA input
+  uses `DNA_1=...` and `DNA_2=...`.
+
+### 3. Run a prediction
+
+Create a local directory for results:
 
 ```bash
 mkdir -p output
+```
+
+#### Protein-DNA prediction
+
+```bash
 docker run --rm --gpus all \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni:v0.1.1 \
@@ -57,10 +78,9 @@ docker run --rm --gpus all \
   --mlp-device cuda:0
 ```
 
-## Protein-RNA example
+#### Protein-RNA prediction
 
 ```bash
-mkdir -p output
 docker run --rm --gpus all \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni:v0.1.1 \
@@ -74,20 +94,12 @@ docker run --rm --gpus all \
   --mlp-device cuda:0
 ```
 
-For a two-GPU system, set `--na-device cuda:1` to place the nucleic-acid model
-on the second GPU. Repeat `--chain` for every nucleic-acid chain. Every chain
-must be supplied in the 5-prime to 3-prime direction.
+The models are loaded sequentially, so one GPU can run both tasks. On a
+two-GPU system, `--na-device cuda:1` can place the nucleic-acid model on the
+second GPU. The ESM-2 3B protein stage automatically falls back to CPU when
+the requested GPU does not have enough VRAM.
 
-## Input rules
-
-- Protein sequences may contain only the 20 standard amino-acid letters.
-- Mutations use one-based notation such as `A10V`; the reference residue must
-  match the input protein sequence.
-- DNA accepts A, C, G, and T.
-- RNA accepts A, C, G, and U.
-- Sample and chain identifiers may contain letters, digits, `.`, `_`, and `-`.
-
-## Output
+### 4. Output
 
 Results are written beneath the mounted `/output` directory:
 
@@ -103,31 +115,44 @@ output/
         prempni_prediction.csv
 ```
 
-The prediction files contain the ensemble DDG value in kcal/mol, stability
-classification, input lengths, and wall-clock times for protein embedding,
-nucleic-acid embedding, MLP prediction, and the complete run. A non-negative
-DDG is classified as destabilizing; a negative DDG is classified as
-stabilizing.
+The prediction files contain the final ensemble ΔΔG value in kcal/mol, the
+stability classification, input lengths, and wall-clock times for protein
+embedding, nucleic-acid embedding, MLP prediction, and the complete run. A
+non-negative ΔΔG is classified as **destabilizing mutation**; a negative ΔΔG
+is classified as **stabilizing mutation**.
+
+## Recommended System Requirements
+
+- Linux x86_64
+- Docker Engine ≥ 24
+- NVIDIA driver compatible with CUDA 11.7
+- NVIDIA Container Toolkit
+- ≥ 30 GB free disk space
+- ≥ 32 GB RAM (64 GB recommended for RNA prediction)
+- NVIDIA GPU:
+  - DNA: ≥ 8 GB VRAM
+  - RNA: ≥ 16 GB VRAM recommended; otherwise, the ESM-2 3B protein stage
+    falls back to CPU
 
 ## Citation
 
 The PremPNI article has not yet been published. Citation information and the
-DOI will be added after publication. Until then, acknowledge PremPNI, Weikang
-Sun, and the Minghui Li Research Group in derived academic work.
+DOI will be added after publication. Until then, acknowledge PremPNI and the
+Minghui Li Research Group in derived academic work.
 
 ## License
 
-PremPNI is available for academic, non-commercial use only. See [LICENSE](LICENSE).
-Third-party components retain their original licenses; see
+PremPNI is available for academic, non-commercial use only. See
+[LICENSE](LICENSE). Third-party components retain their original licenses; see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Maintainer build notes
 
-The Git repository intentionally excludes `models/` and
-`runtime-env.tar.gz`, because GitHub rejects files larger than 100 MB. The
-private GHCR image contains these assets. Before building, an authorized
-maintainer stages the verified model tree and packed Python runtime beside the
-Dockerfile, generates `MODEL_MANIFEST.sha256`, and runs:
+The Git repository intentionally excludes `models/` and `runtime-env.tar.gz`,
+because GitHub rejects files larger than 100 MB. The private GHCR image
+contains these assets. Before building, an authorized maintainer stages the
+verified model tree and packed Python runtime beside the Dockerfile, generates
+`MODEL_MANIFEST.sha256`, and runs:
 
 ```bash
 docker build \
