@@ -120,8 +120,7 @@ is classified as **stabilizing mutation**.
 - ≥ 32 GB RAM (64 GB recommended for RNA prediction)
 - NVIDIA GPU:
   - DNA: ≥ 8 GB VRAM
-  - RNA: ≥ 16 GB VRAM recommended; otherwise, the ESM-2 3B protein stage
-    falls back to CPU
+  - RNA: ≥ 16 GB VRAM
 
 ## Citation
 
