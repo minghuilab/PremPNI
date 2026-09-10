@@ -11,4 +11,6 @@ The JSON and TSV files were compared with the public website downloads on 2026-0
 
 In the website TSV, `nucleic_acid_sequences` separates chains with `|`; `mutations` contains sequence-indexed substitutions. This is not the schema accepted by the historical research batch script. Mutations are numbered from 1 in the supplied protein sequence, not from PDB residue numbering.
 
-No expected ΔΔG is supplied for these examples until a real matched-input model run establishes it. The historical numeric fixtures in `scripts/smoke_test.sh` use different inputs.
+Real CPU results for both examples are recorded in [CPU validation](../docs/installation.md#cpu-validation). The historical numeric fixtures in `scripts/smoke_test.sh` use different inputs.
+
+Both example shell scripts select CPU for all three model stages. They do not request GPU access. Keep the explicit CPU options when copying commands from these scripts.

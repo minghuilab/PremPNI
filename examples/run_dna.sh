@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p output
-docker run --rm --gpus all \
+docker run --rm \
+  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni:v0.1.1 \
   --complex-type dna \
@@ -10,6 +11,6 @@ docker run --rm --gpus all \
   --mutation A39T \
   --chain DNA_1=GCTTGTGTGGGCAGCG \
   --chain DNA_2=CGCTGCCCACACAAGC \
-  --protein-device cuda:0 \
-  --na-device cuda:0 \
-  --mlp-device cuda:0
+  --protein-device cpu \
+  --na-device cpu \
+  --mlp-device cpu

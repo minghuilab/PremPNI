@@ -24,7 +24,7 @@ docker pull ghcr.io/minghuilab/prempni:v0.1.1
 docker run --rm ghcr.io/minghuilab/prempni:v0.1.1 --help
 ```
 
-The published image includes the runtime, embedding models and prediction weights. The project documents anonymous access to the image; no separate Hugging Face model download is needed. See [installation, model verification and troubleshooting](docs/installation.md) for GPU prerequisites and source-build limitations.
+The published image includes the runtime, embedding models and prediction weights. The project documents anonymous access to the image; no separate Hugging Face model download is needed. See [installation, model verification and troubleshooting](docs/installation.md) for CPU memory requirements and source-build limitations.
 
 ## Input
 
@@ -38,7 +38,7 @@ The examples below match the website's Load example and downloadable files: **2K
 
 ## Run
 
-Commands below use Bash on Linux (or a configured WSL2 Docker environment):
+Commands below run entirely on CPU using Bash on Linux (or a configured WSL2 Docker environment). No GPU, NVIDIA driver or NVIDIA Container Toolkit is required. Keep all three `--*-device cpu` options: the existing image defaults to CUDA for its embedding stages. The image includes CUDA libraries, but CPU execution does not require GPU hardware.
 
 ```bash
 mkdir -p output
@@ -47,7 +47,8 @@ mkdir -p output
 ### Protein–DNA
 
 ```bash
-docker run --rm --gpus all \
+docker run --rm \
+  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni:v0.1.1 \
   --complex-type dna \
@@ -56,15 +57,16 @@ docker run --rm --gpus all \
   --mutation A39T \
   --chain DNA_1=GCTTGTGTGGGCAGCG \
   --chain DNA_2=CGCTGCCCACACAAGC \
-  --protein-device cuda:0 \
-  --na-device cuda:0 \
-  --mlp-device cuda:0
+  --protein-device cpu \
+  --na-device cpu \
+  --mlp-device cpu
 ```
 
 ### Protein–RNA
 
 ```bash
-docker run --rm --gpus all \
+docker run --rm \
+  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni:v0.1.1 \
   --complex-type rna \
@@ -72,9 +74,9 @@ docker run --rm --gpus all \
   --protein-sequence AVPETRPNHTIYINNLNEKIKKDELKKSLHAIFSRFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFV \
   --mutation K49A \
   --chain RNA_1=GGCAGAGUCCUUCGGGACAUUGCACCUGCC \
-  --protein-device cuda:0 \
-  --na-device cuda:0 \
-  --mlp-device cuda:0
+  --protein-device cpu \
+  --na-device cpu \
+  --mlp-device cpu
 ```
 
 The same commands are available as `bash examples/run_dna.sh` and `bash examples/run_rna.sh` after cloning this repository. See [example formats](examples/README.md).

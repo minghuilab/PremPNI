@@ -4,14 +4,15 @@
 
 Local release inspection on 2026-09-10 confirmed PyTorch `2.0.1+cu117` (CUDA 11.7) and verified all 13 model assets against the bundled manifest. The inspected `v0.1.1` and `latest` tags shared digest `sha256:befc7207e644c957fb79ff54e5c42ccac27ff53b5ff3f2353b85ee86043fce23`. This was a local-image inspection, not a fresh registry pull or GPU prediction test.
 
-Use `ghcr.io/minghuilab/prempni:v0.1.1`. The README commands run one prediction per container. Both embedding stages and the MLP can use `cuda:0`; two GPUs are not required.
+Use `ghcr.io/minghuilab/prempni:v0.1.1`. The README commands run one prediction per container, entirely on CPU. Pass `--protein-device cpu --na-device cpu --mlp-device cpu` and omit Docker GPU options. These explicit settings are required because this image defaults to CUDA for embedding. No NVIDIA driver or NVIDIA Container Toolkit is needed for this CPU workflow. The existing image still contains CUDA libraries; it is not a smaller CPU-only image build.
 
-The existing release guidance recommends Linux x86_64, Docker Engine 24 or newer, NVIDIA Container Toolkit, a driver supporting the packaged CUDA runtime, at least 30 GB free disk and 32 GB RAM (64 GB recommended for RNA). Its suggested GPU memory is 8 GB for DNA and 16 GB for RNA. These are starting recommendations, not guaranteed limits for every sequence length. The local image occupies about 18.9 GB; allow additional space for image extraction, embeddings and outputs.
+Use Linux x86_64 and Docker Engine 24 or newer. Plan for at least 30 GB free disk space and substantial host RAM; 64 GB RAM is a practical starting budget, especially for RNA with ESM-2 3B. Actual peak memory and runtime depend on sequence length and CPU resources, so this is not a guarantee for arbitrary inputs. The image occupies about 18.9 GB; allow additional space for extraction, embeddings and outputs. CPU inference can be substantially slower than GPU inference.
+
+The examples set `OMP_NUM_THREADS=8` and `MKL_NUM_THREADS=8` to limit CPU thread oversubscription. Adjust these values for your machine and other workloads.
 
 Before prediction:
 
 ```bash
-nvidia-smi
 docker pull ghcr.io/minghuilab/prempni:v0.1.1
 docker run --rm ghcr.io/minghuilab/prempni:v0.1.1 --help
 ```
@@ -27,6 +28,17 @@ docker run --rm --entrypoint python ghcr.io/minghuilab/prempni:v0.1.1 \
   --manifest /opt/prempni/MODEL_MANIFEST.sha256
 ```
 
+## CPU validation
+
+On 2026-09-10, the published v0.1.1 image completed both website examples with all three devices set to `cpu`, no Docker GPU request, eight CPU threads, an eight-core container limit and a 64 GiB memory limit:
+
+| Input | Final ΔΔG (kcal/mol) | Reported pipeline time |
+| --- | ---: | ---: |
+| 2KO0 A39T (DNA) | 0.5487042169 | 24.7 s |
+| 1AUD K49A (RNA) | 0.9141754707 | 103.3 s |
+
+These are real CPU-run results on a shared server, not performance guarantees for other machines or sequence lengths. Times are the pipeline's `timing_seconds.total`, not measured Docker startup-to-exit time. CPU/GPU floating-point results may differ slightly; this check did not run a paired GPU comparison. The 64 GiB setting was a container memory limit, not measured peak consumption.
+
 ## Source checkout and builds
 
 ```bash
@@ -41,8 +53,8 @@ For a maintainer rebuild, provide the release's packed runtime and all model fil
 ## Troubleshooting
 
 - Docker daemon connection failure: confirm Docker is running and your account can access it.
-- GPU unavailable: check the host NVIDIA driver and NVIDIA Container Toolkit configuration. `--gpus all` requires GPU-enabled Docker.
-- Out of memory: GPU/RAM requirements vary with input length; use a less occupied GPU or more memory.
+- CUDA requested/unavailable: confirm that all three device options are set to `cpu`; removing the Docker GPU option alone does not change the image defaults.
+- Out of memory: host RAM requirements vary with input length; increase the memory available to Docker or use a machine with more RAM.
 - Mutation validation failure: index the exact supplied sequence from 1 and verify its wild-type residue. A PDB/literature residue number may require mapping.
 - Existing output: choose a new `--sample-id`, or use `--overwrite` only when replacing that result is intended.
 - A repeated sample ID must not be used as a cache key for changed sequences. Prefer a fresh ID/output directory.
