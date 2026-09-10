@@ -1,61 +1,33 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
-
-image="${1:-ghcr.io/minghuilab/prempni:latest}"
+image="${1:-ghcr.io/minghuilab/prempni:v0.2.0}"
 output_dir="${2:-$PWD/output}"
 mkdir -p "$output_dir"
-
-docker run --rm --gpus all \
-  -v "$output_dir:/output" \
-  "$image" \
-  --complex-type dna \
-  --sample-id DNA_demo \
-  --protein-sequence MKTAYIAKQRQISFVKSHFSRQDILDLIC \
-  --mutation M1V \
-  --chain DNA_1=ACGTACGT \
-  --chain DNA_2=TGCATGCA \
-  --protein-device cuda:0 \
-  --na-device cuda:0 \
-  --mlp-device cuda:0 \
-  --overwrite
-
-test -s "$output_dir/protein_dna/DNA_demo/prediction/prempni_prediction.json"
-
-docker run --rm --gpus all \
-  -v "$output_dir:/output" \
-  "$image" \
-  --complex-type rna \
-  --sample-id RNA_demo \
-  --protein-sequence MGSSHHHHHHSSGLVPRGSHMASMTGGQQMGRGSRHVGNRANPDPNCCLGVFGLSLYTTERDLREVFSKYGPIADVSIVYDQQSRRSRGFAFVYFENVDDAKEAKERANGMELDGRRIRVDFSITKRPH \
-  --mutation R119A \
-  --chain RNA_1=AAGAAC \
-  --protein-device cuda:0 \
-  --na-device cuda:1 \
-  --mlp-device cuda:0 \
-  --overwrite
-
-test -s "$output_dir/protein_rna/RNA_demo/prediction/prempni_prediction.json"
-
-python - "$output_dir" <<'PY'
+output_dir="$(cd "$output_dir" && pwd)"
+run_dir="$(mktemp -d "$output_dir/smoke.XXXXXX")"
+docker run --rm --network none -v "$run_dir:/output" "$image" \
+  --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+python - "$run_dir" <<'PY'
+import csv
 import json
 import math
 import sys
 from pathlib import Path
-
-root = Path(sys.argv[1])
-expected = {
-    root / "protein_dna/DNA_demo/prediction/prempni_prediction.json": 0.117677,
-    root / "protein_rna/RNA_demo/prediction/prempni_prediction.json": 0.906902,
-}
-for path, target in expected.items():
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    actual = float(payload["mean_ddg"])
-    if not math.isclose(actual, target, rel_tol=0.0, abs_tol=1e-5):
-        raise SystemExit(f"Unexpected prediction in {path}: {actual} != {target}")
-    if "model_predictions" in payload:
-        raise SystemExit(f"Single-model predictions must not be exposed: {path}")
-print("PremPNI DNA and RNA predictions match the validated references.")
+paths = list(Path(sys.argv[1]).glob("collections/*/prempni_prediction.json"))
+assert len(paths) == 1, paths
+payload = json.loads(paths[0].read_text(encoding="utf-8"))
+assert payload["status"] == "completed"
+expected = {"2KO0": ("PremPDI2", 0.5487042168776194), "1AUD": ("PremPRI2", 0.9141754706700643)}
+assert len(payload["results"]) == 2
+for item in payload["results"]:
+    model, target = expected[item["sample_id"]]
+    row = item["predictions"][0]
+    assert item["predictor"] == model
+    assert math.isclose(row["mean_ddg"], target, abs_tol=1e-5, rel_tol=0)
+    assert row["classification"] == "Destabilizing"
+    assert "model_predictions" not in item
+with paths[0].with_suffix(".csv").open(encoding="utf-8-sig", newline="") as handle:
+    rows = list(csv.DictReader(handle))
+assert [r["ddg_kcal_mol"] for r in rows] == ["0.549", "0.914"]
+print("CPU website-example regression passed.")
 PY
-
-echo "PremPNI Docker smoke tests passed."

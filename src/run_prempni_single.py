@@ -42,9 +42,9 @@ def parse_args():
         help="Repeat for each 5'-to-3' nucleic-acid chain, e.g. DNA_1=ACGT or RNA_1=ACGU.",
     )
     parser.add_argument("--output-root", default=None)
-    parser.add_argument("--protein-device", default=os.environ.get("PREMPNI_PROTEIN_DEVICE", "cuda:0"))
-    parser.add_argument("--na-device", default=os.environ.get("PREMPNI_NA_DEVICE", "cuda:0"))
-    parser.add_argument("--mlp-device", default=os.environ.get("PREMPNI_MLP_DEVICE", "auto"))
+    parser.add_argument("--protein-device", default=os.environ.get("PREMPNI_PROTEIN_DEVICE", "cpu"))
+    parser.add_argument("--na-device", default=os.environ.get("PREMPNI_NA_DEVICE", "cpu"))
+    parser.add_argument("--mlp-device", default=os.environ.get("PREMPNI_MLP_DEVICE", "cpu"))
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--esmdbp-model-dir", default=str(MODEL_ROOT / "esm_dbp"))
     parser.add_argument("--hyenadna-checkpoint-root", default=str(MODEL_ROOT / "hyenadna"))

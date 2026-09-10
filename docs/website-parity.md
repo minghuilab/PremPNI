@@ -1,22 +1,25 @@
-# Website and standalone inference
+# Website and Docker v0.2.0
 
-Checked against the website source and release records on 2026-09-10. Latest recorded frontend release: `20260910-readability-v6`; CSV precision release: `20260910-csv-precision-v5`.
+Docker v0.2.0 implements the public website's scientific input and result conventions. The reference website releases are `20260910-readability-v6` and `20260910-csv-precision-v5`.
 
-| Behavior | Website | Standalone image |
-| --- | --- | --- |
-| DNA/RNA model names | PremPDI2 / PremPRI2 | `complex_type=dna/rna`, final `mean_ddg` |
-| Scientific output | Final three-model ensemble ΔΔG, kcal/mol | Same ensemble design in source |
-| Negative / non-negative | Stabilizing / Destabilizing | stabilizing mutation / destabilizing mutation |
-| Rounding | Display and CSV: three decimals; classify before rounding | JSON/CSV retain numeric precision |
-| Input | Wild-type protein, one or more 5′→3′ chains, sequence-indexed mutation | Same sequence contract via CLI flags |
-| Examples | 2KO0 A39T and 1AUD K49A | Matching inputs under `examples/` |
-| Job management | Queue, Job ID, result lookup and optional email | Local output directory |
-| Lists/scanning/collections | Supported by web services | Default container entry point runs one mutation |
+| Behavior | Shared contract |
+| --- | --- |
+| DNA / RNA models | PremPDI2 / PremPRI2; final mean of three MLPs |
+| Classification | Negative: Stabilizing; zero or positive: Destabilizing, determined before rounding |
+| Display and CSV | Three decimals, including exact halfway rounding consistent with JavaScript toFixed |
+| JSON | Raw numeric prediction retained; Docker also provides prediction_display |
+| Sequences | Wild-type protein, one or more 5′→3′ chains, one-based sequence mutation position |
+| Input validation | 20 standard amino acids; DNA A/C/G/T; RNA A/C/G/U; valid and unique chain/sample identifiers; matching wild-type residue |
+| Lengths | Up to 5,000 protein residues, 32 nucleic-acid chains and 10,000 total nucleotides, matching current web configuration |
+| Examples | 2KO0 A39T and 1AUD K49A, bundled inside the image |
+| Mutation lists | Ordered independent single-site substitutions; duplicates rejected |
+| Alanine scanning | One row per protein position; A-to-A rows are synthetic zero, Destabilizing, computed=false |
+| Multiple complexes | The same five-column website TSV; DNA/RNA can be mixed |
+| Failure output | No numeric prediction and no stability classification; retain error and input |
+| Downloads | Full inputs, final ensemble predictions and timing; no individual submodel predictions in public result files |
 
-Website alanine scanning reports existing alanine positions as synthetic zero ΔΔG rows, classified as Destabilizing, without invoking the model for those rows. Do not interpret them as measured or inferred effects. Website failure rows without a prediction have no classification.
+The six final MLP checkpoint hashes match the website inference pipeline's configured default model paths. All 13 assets in the base v0.1.1 image passed the manifest check; v0.2.0 inherits these immutable model layers without replacing weights. CPU and GPU arithmetic can differ slightly. A matched-input CPU regression checks model continuity; this does not claim a bitwise CPU/GPU comparison.
 
-The website runs a separately deployed inference pipeline. Matching model names and source architecture alone do not prove that every deployed file or checkpoint is byte-identical to a Docker release. Use checkpoint hashes and matched-input inference to establish numerical equivalence. This documentation update does not rebuild the image, retrain models or deploy website changes.
+Docker now defaults to CPU, records local Job IDs, submission/start/completion timestamps and progress in `job.json`, and preserves results in the mounted output directory. Jobs run sequentially within that invocation. The website supplies a shared queue, public result lookup and email notifications; these hosted-service functions are not installed or configured by the local CLI. Local Job IDs are not public website Job IDs. Docker's total processing time includes subprocess startup and local model loading, so it need not match server job latency.
 
-Help illustrations are explicitly illustrative; they are not reference model predictions. Website status polling and typography releases do not change model identity.
-
-On 2026-09-10, SHA256 checks of the six final MLP checkpoint files at the website inference pipeline's configured default model paths matched this repository's manifest (three DNA and three RNA). All 13 assets in the local v0.1.1 Docker image also passed its bundled manifest check. This confirms the checked final MLP weights; a full matched-input end-to-end prediction was not run during this documentation audit.
+The website batches model calculations; Docker v0.2.0 isolates independent mutations in subprocesses for predictable memory lifetime. Both implement the same mutation semantics, while throughput and job scheduling differ. CSV failure status is recorded per mutation in Docker collections so successful rows remain usable even when another mutation fails. Models, experimental datasets and the live website were not modified by this interface alignment.
