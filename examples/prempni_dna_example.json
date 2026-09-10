@@ -1,0 +1,10 @@
+{
+  "sample_id": "2KO0",
+  "complex_type": "dna",
+  "protein_sequence": "MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR",
+  "mutation": "A39T",
+  "chains": [
+    { "chain_id": "DNA_1", "sequence": "GCTTGTGTGGGCAGCG" },
+    { "chain_id": "DNA_2", "sequence": "CGCTGCCCACACAAGC" }
+  ]
+}

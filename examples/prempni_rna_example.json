@@ -1,0 +1,9 @@
+{
+  "sample_id": "1AUD",
+  "complex_type": "rna",
+  "protein_sequence": "AVPETRPNHTIYINNLNEKIKKDELKKSLHAIFSRFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFV",
+  "mutation": "K49A",
+  "chains": [
+    { "chain_id": "RNA_1", "sequence": "GGCAGAGUCCUUCGGGACAUUGCACCUGCC" }
+  ]
+}

@@ -1,0 +1,6 @@
+# Preserve reproducible data hashes and portable shell scripts on all platforms.
+datasets/*.tsv text eol=lf
+datasets/*.json text eol=lf
+datasets/*.xlsx binary
+examples/*.sh text eol=lf
+scripts/export_datasets.py text eol=lf

@@ -1,0 +1,45 @@
+{
+  "version": "2026-09-09",
+  "source_file": "PremPNI_curated_datasets.xlsx",
+  "source_sha256": "23efe7455ea7085d9d913f66cae6df04a292398dea1a53991b482ad4e7791248",
+  "datasets": {
+    "S1664": {
+      "rows": 1664,
+      "columns": [
+        "Mutation",
+        "Protein_sequence",
+        "Nucleic_acid_sequence",
+        "DDG"
+      ],
+      "sha256": "6eab386d555900b1ea2e2ef5b680d4246d5ab0919760acafe961e60a00616162"
+    },
+    "S1150": {
+      "rows": 1150,
+      "columns": [
+        "Mutation",
+        "Protein_sequence",
+        "Nucleic_acid_sequence",
+        "DDG"
+      ],
+      "sha256": "ecb22bbeb9650b5624e2eef484a16898e4a878d9bdd9019d2cdbad563f9a3330"
+    },
+    "S1336": {
+      "rows": 1336,
+      "columns": [
+        "PDB_mutation",
+        "DDG",
+        "PremPDI2_prediction"
+      ],
+      "sha256": "bea3370eda53749026c57877f48bc06418f786a4d37e706c43051ac2b9ea80cb"
+    },
+    "S599": {
+      "rows": 599,
+      "columns": [
+        "PDB_mutation",
+        "DDG",
+        "PremPRI2_prediction"
+      ],
+      "sha256": "b7d42a165b934c49c1b0df63fe778d9a4c94f28f0e0cc6fd0fc461093b99a447"
+    }
+  }
+}
