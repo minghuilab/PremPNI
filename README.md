@@ -24,7 +24,7 @@ docker pull ghcr.io/minghuilab/prempni:v0.2.0
 docker run --rm ghcr.io/minghuilab/prempni:v0.2.0 --help
 ```
 
-The published image includes the runtime, embedding models and prediction weights. The project documents anonymous access to the image; no separate Hugging Face model download is needed. See [installation, model verification and troubleshooting](docs/installation.md) for CPU memory requirements and source-build limitations.
+The image includes the runtime, embedding models and prediction weights; no separate Hugging Face model download is needed. The GHCR package is currently private pending administrator publication. Downloading it currently requires a GitHub account with package access and `docker login ghcr.io`. Anonymous downloads will be available only after the administrator makes the package public. See [installation, model verification and troubleshooting](docs/installation.md) for CPU memory requirements and source-build limitations.
 
 ## Input
 

@@ -2,6 +2,8 @@
 
 ## CPU-default image
 
+The image has been uploaded, but the GHCR package currently remains private. An authorized account must first run `docker login ghcr.io`; an administrator will handle changing the package to public. Repository visibility and container-package visibility are separate.
+
 ```bash
 docker pull ghcr.io/minghuilab/prempni:v0.2.0
 docker run --rm ghcr.io/minghuilab/prempni:v0.2.0 --help
