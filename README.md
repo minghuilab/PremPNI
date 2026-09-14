@@ -17,14 +17,14 @@ Both interfaces support single mutations, mutation lists, alanine scanning and m
 
 ## Install
 
-The documented image release is `v0.2.0`:
+The documented image release is `v0.2.1`:
 
 ```bash
-docker pull ghcr.io/minghuilab/prempni:v0.2.0
-docker run --rm ghcr.io/minghuilab/prempni:v0.2.0 --help
+docker pull ghcr.io/minghuilab/prempni:v0.2.1
+docker run --rm ghcr.io/minghuilab/prempni:v0.2.1 --help
 ```
 
-The image includes the runtime, embedding models and prediction weights; no separate Hugging Face model download is needed. The GHCR package is currently private pending administrator publication. Downloading it currently requires a GitHub account with package access and `docker login ghcr.io`. Anonymous downloads will be available only after the administrator makes the package public. See [installation, model verification and troubleshooting](docs/installation.md) for CPU memory requirements and source-build limitations.
+The image includes the runtime, embedding models and prediction weights; no separate Hugging Face model download is needed. The GHCR package currently requires package access; use `docker login ghcr.io` with an authorized GitHub account if `docker pull` is denied. See the [installation guide](docs/installation.md) for system requirements and source builds.
 
 ## Input
 
@@ -38,7 +38,7 @@ The examples below match the website's Load example and downloadable files: **2K
 
 ## Run
 
-The v0.2.0 image defaults to CPU for all stages, with eight CPU threads. Commands below use Bash on Linux (or a configured WSL2 Docker environment). No GPU, NVIDIA driver or NVIDIA Container Toolkit is required; no device flags are needed. The image reuses the verified runtime, which includes CUDA libraries, but CPU execution does not require GPU hardware.
+The v0.2.1 image runs all stages on CPU with 10 CPU threads by default. Commands below use Bash on Linux (or a configured WSL2 Docker environment). Set `OMP_NUM_THREADS` and `MKL_NUM_THREADS` only when you need a different thread count.
 
 ```bash
 mkdir -p output
@@ -48,9 +48,9 @@ mkdir -p output
 
 ```bash
 docker run --rm \
-  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
+  -e OMP_NUM_THREADS=10 -e MKL_NUM_THREADS=10 \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.2.0 \
+  ghcr.io/minghuilab/prempni:v0.2.1 \
   --complex-type dna \
   --sample-id 2KO0 \
   --protein-sequence MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR \
@@ -63,9 +63,9 @@ docker run --rm \
 
 ```bash
 docker run --rm \
-  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
+  -e OMP_NUM_THREADS=10 -e MKL_NUM_THREADS=10 \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.2.0 \
+  ghcr.io/minghuilab/prempni:v0.2.1 \
   --complex-type rna \
   --sample-id 1AUD \
   --protein-sequence AVPETRPNHTIYINNLNEKIKKDELKKSLHAIFSRFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFV \
@@ -87,11 +87,11 @@ Use the same downloadable JSON or five-column TSV as the website:
 
 ```bash
 docker run --rm -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.2.0 \
+  ghcr.io/minghuilab/prempni:v0.2.1 \
   --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
 
 docker run --rm -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.2.0 \
+  ghcr.io/minghuilab/prempni:v0.2.1 \
   --input-json /opt/prempni/examples/prempni_dna_example.json
 ```
 

@@ -2,9 +2,9 @@
 set -euo pipefail
 mkdir -p output
 docker run --rm \
-  -e OMP_NUM_THREADS=8 -e MKL_NUM_THREADS=8 \
+  -e OMP_NUM_THREADS=10 -e MKL_NUM_THREADS=10 \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni:v0.2.0 \
+  ghcr.io/minghuilab/prempni:v0.2.1 \
   --complex-type dna \
   --sample-id 2KO0 \
   --protein-sequence MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR \

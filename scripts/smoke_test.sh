@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-image="${1:-ghcr.io/minghuilab/prempni:v0.2.0}"
+image="${1:-ghcr.io/minghuilab/prempni:v0.2.1}"
 output_dir="${2:-$PWD/output}"
 mkdir -p "$output_dir"
 output_dir="$(cd "$output_dir" && pwd)"

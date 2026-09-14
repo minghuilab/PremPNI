@@ -14,7 +14,7 @@ from pathlib import Path
 
 from web_contract import display, effect, read_collection, read_mutations, unique_requests, validate_request, write_csv
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 
 def parse_args(argv=None):
