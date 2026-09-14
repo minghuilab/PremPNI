@@ -17,11 +17,11 @@ from protein_dna.processing import validate_identifier
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "载入Seed46/trial8、Seed66/trial0和Seed77/trial4三个F-F MLP，"
-            "输出三个ΔΔG及其均值和稳定性分类。"
+            "Load the three F-F MLPs (Seed46/trial8, Seed66/trial0 and Seed77/trial4), "
+            "and report their DDG predictions, mean and stability classification."
         )
     )
-    parser.add_argument("--sample-id", required=True, help="样本唯一ID")
+    parser.add_argument("--sample-id", required=True, help="Unique sample ID")
     parser.add_argument(
         "--feature-root",
         default=os.environ.get("PREMPNI_OUTPUT_ROOT", "/output") + "/protein_dna",
@@ -30,7 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--model-root",
         default=os.environ.get("PREMPNI_MODEL_ROOT", "/opt/prempni/models") + "/mlp/protein_dna",
     )
-    parser.add_argument("--device", default="cpu", help="cpu、cuda或cuda:0")
+    parser.add_argument("--device", default="cpu", help="cpu, cuda or cuda:0")
     parser.add_argument("--overwrite", action="store_true")
     return parser
 
@@ -53,9 +53,9 @@ def main() -> None:
         existing = [path for path in (json_path, csv_path) if path.exists()]
         if existing and not args.overwrite:
             raise FileExistsError(
-                "预测文件已存在："
+                "Prediction files already exist: "
                 + ", ".join(str(path) for path in existing)
-                + "。如需覆盖，请添加--overwrite。"
+                + ". Use --overwrite to replace existing files."
             )
 
         wt_site, muta_site, dna_mean = load_sample_features(
@@ -91,15 +91,15 @@ def main() -> None:
             writer.writeheader()
             writer.writerow(row)
     except (ValueError, KeyError, FileNotFoundError, FileExistsError, RuntimeError) as error:
-        parser.exit(2, f"错误：{error}\n")
+        parser.exit(2, f"Error: {error}\n")
 
-    print(f"Sample_ID：{result.sample_id}")
+    print(f"Sample_ID: {result.sample_id}")
     for model_name, value in result.model_predictions.items():
-        print(f"{model_name} ΔΔG：{value:.6f}")
-    print(f"三模型平均 ΔΔG：{result.mean_ddg:.6f}")
-    print(f"分类：{result.classification}")
-    print(f"JSON结果：{json_path}")
-    print(f"CSV结果：{csv_path}")
+        print(f"{model_name} ΔΔG: {value:.6f}")
+    print(f"Three-model mean DDG: {result.mean_ddg:.6f}")
+    print(f"Classification: {result.classification}")
+    print(f"JSON results: {json_path}")
+    print(f"CSV results: {csv_path}")
 
 
 if __name__ == "__main__":

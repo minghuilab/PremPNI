@@ -52,8 +52,8 @@ def validate_sample_id(sample_id: str) -> str:
     sample_id = sample_id.strip()
     if not SAMPLE_ID_PATTERN.fullmatch(sample_id):
         raise ValueError(
-            "Sample_ID 只能包含英文字母、数字、点、下划线和连字符，"
-            "并且必须以字母或数字开头。"
+            "Sample_ID may contain only ASCII letters, digits, dots, underscores and hyphens, "
+            "and must start with a letter or digit."
         )
     return sample_id
 
@@ -62,7 +62,7 @@ def validate_sequence(sequence: str) -> str:
     """Remove whitespace, convert to upper case, and validate residues."""
     sequence = re.sub(r"\s+", "", sequence).upper()
     if not sequence:
-        raise ValueError("蛋白质序列不能为空。")
+        raise ValueError("Protein sequence must not be empty.")
 
     invalid = [
         (position, residue)
@@ -74,10 +74,10 @@ def validate_sequence(sequence: str) -> str:
             f"{residue}@{position}" for position, residue in invalid[:10]
         )
         if len(invalid) > 10:
-            details += f", ...（共 {len(invalid)} 处）"
+            details += f", ... ({len(invalid)} positions total)"
         raise ValueError(
-            "蛋白质序列含有非标准氨基酸；只允许20种标准氨基酸。"
-            f"异常位置：{details}"
+            "Protein sequence contains nonstandard amino acids; only the 20 standard amino acids are allowed. "
+            f"Invalid positions: {details}"
         )
     return sequence
 
@@ -86,26 +86,26 @@ def validate_mutation(mutation_text: str, sequence: str) -> Mutation:
     mutation_text = mutation_text.strip().upper()
     match = MUTATION_PATTERN.fullmatch(mutation_text)
     if match is None:
-        raise ValueError("突变格式错误，应使用类似 A10V 的格式。")
+        raise ValueError("Invalid mutation format; use a substitution such as A10V.")
 
     reference, position_text, alternate = match.groups()
     if reference not in STANDARD_AMINO_ACIDS:
-        raise ValueError(f"参考氨基酸 {reference!r} 不是标准氨基酸。")
+        raise ValueError(f"Reference residue {reference!r} is not a standard amino acid.")
     if alternate not in STANDARD_AMINO_ACIDS:
-        raise ValueError(f"目标氨基酸 {alternate!r} 不是标准氨基酸。")
+        raise ValueError(f"Alternate residue {alternate!r} is not a standard amino acid.")
     if reference == alternate:
-        raise ValueError("参考氨基酸和目标氨基酸相同，不构成突变。")
+        raise ValueError("Reference and alternate residues are identical; no substitution is specified.")
 
     position = int(position_text)
     if position > len(sequence):
         raise ValueError(
-            f"突变位置 {position} 超出序列长度 {len(sequence)}。"
+            f"Mutation position {position} exceeds sequence length {len(sequence)}."
         )
     actual = sequence[position - 1]
     if actual != reference:
         raise ValueError(
-            f"突变 {mutation_text} 与输入序列不一致：序列第 {position} 位是 "
-            f"{actual}，不是 {reference}。"
+            f"Mutation {mutation_text} does not match the input sequence: position {position} contains "
+            f"{actual}, not {reference}."
         )
     return Mutation(reference, position, alternate)
 
@@ -146,9 +146,9 @@ def ensure_outputs_available(
     existing = [path for path in paths if path.exists()]
     if existing and not overwrite:
         raise FileExistsError(
-            "输出文件已存在："
+            "Output files already exist: "
             + ", ".join(str(path) for path in existing)
-            + "。如需覆盖，请添加 --overwrite。"
+            + ". Use --overwrite to replace existing files."
         )
 
 
@@ -164,7 +164,7 @@ class ESM2ThreeBEmbedder:
         self.requested_device = torch.device(device)
         self.device_warnings: list[str] = []
 
-        print(f"正在加载 ESM-2(3B)：{model_location}", file=sys.stderr)
+        print(f"Loading ESM-2(3B): {model_location}", file=sys.stderr)
         self.model, self.alphabet = esm.pretrained.load_model_and_alphabet(
             model_location
         )
@@ -178,9 +178,9 @@ class ESM2ThreeBEmbedder:
             return requested
 
         if not torch.cuda.is_available():
-            warning = "请求使用CUDA，但当前PyTorch无法使用CUDA；已回退到CPU FP32。"
+            warning = "CUDA was requested but is unavailable in PyTorch; falling back to CPU FP32."
             self.device_warnings.append(warning)
-            print(f"警告：{warning}", file=sys.stderr)
+            print(f"Warning: {warning}", file=sys.stderr)
             return torch.device("cpu")
 
         index = requested.index if requested.index is not None else 0
@@ -199,13 +199,13 @@ class ESM2ThreeBEmbedder:
         required_bytes = parameter_bytes + reserve_bytes
         if free_bytes < required_bytes:
             warning = (
-                f"{cuda_device} 可用显存 {free_bytes / 1024**3:.2f} GiB，"
-                f"不足以容纳FP32模型参数及基本运行空间"
-                f"（至少约 {required_bytes / 1024**3:.2f} GiB）；"
-                "已回退到CPU FP32。"
+                f"{cuda_device} has {free_bytes / 1024**3:.2f} GiB of free GPU memory, "
+                f"insufficient for FP32 model parameters and basic workspace "
+                f"(requires approximately {required_bytes / 1024**3:.2f} GiB minimum); "
+                "falling back to CPU FP32."
             )
             self.device_warnings.append(warning)
-            print(f"警告：{warning}", file=sys.stderr)
+            print(f"Warning: {warning}", file=sys.stderr)
             return torch.device("cpu")
 
         try:
@@ -214,11 +214,11 @@ class ESM2ThreeBEmbedder:
             self.model.to("cpu")
             torch.cuda.empty_cache()
             warning = (
-                f"ESM-2(3B) 无法载入 {cuda_device}（{error}）；"
-                "已回退到CPU FP32。"
+                f"ESM-2(3B) could not be loaded onto {cuda_device} ({error}); "
+                "falling back to CPU FP32."
             )
             self.device_warnings.append(warning)
-            print(f"警告：{warning}", file=sys.stderr)
+            print(f"Warning: {warning}", file=sys.stderr)
             return torch.device("cpu")
         return cuda_device
 
@@ -239,11 +239,11 @@ class ESM2ThreeBEmbedder:
         expected_shape = (len(sequence), EMBEDDING_DIM)
         if tuple(embeddings.shape) != expected_shape:
             raise RuntimeError(
-                f"ESM-2(3B) 输出维度异常：期望 {expected_shape}，"
-                f"实际 {tuple(embeddings.shape)}。"
+                f"Unexpected ESM-2(3B) output shape: expected {expected_shape}, "
+                f"got {tuple(embeddings.shape)}."
             )
         if not torch.isfinite(embeddings).all():
-            raise RuntimeError("ESM-2(3B) 输出中含有 NaN 或 Inf。")
+            raise RuntimeError("ESM-2(3B) output contains NaN or Inf.")
         return embeddings.contiguous()
 
     def run_wild_and_mutant(
@@ -273,7 +273,7 @@ class ESM2ThreeBEmbedder:
         if tuple(wt_site.shape) != (EMBEDDING_DIM,) or tuple(
             muta_site.shape
         ) != (EMBEDDING_DIM,):
-            raise RuntimeError("WT或突变型位点特征维度不是 (2560,)。")
+            raise RuntimeError("Wild-type or mutant site feature shape is not (2560,).")
 
         wt_path, mutant_path, site_path, metadata_path = paths
         wt_path.parent.mkdir(parents=True, exist_ok=True)

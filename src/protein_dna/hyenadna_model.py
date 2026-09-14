@@ -1164,25 +1164,25 @@ class CharacterTokenizer(PreTrainedTokenizer):
         return cls.from_config(cfg)
 
 
-# 设置日志配置
+# Configure logging
 def setup_logger(log_file):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     
-    # 创建一个日志处理器，用于将日志信息输出到文件
+    # Create a handler for file logging
     fh = logging.FileHandler(log_file)
     fh.setLevel(logging.INFO)
     
-    # 创建一个日志处理器，用于将日志信息输出到控制台
+    # Create a handler for console logging
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
     
-    # 设置日志格式
+    # Set the log format
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     
-    # 将处理器添加到logger
+    # Add handlers to the logger
     logger.addHandler(fh)
     logger.addHandler(ch)
     
@@ -1322,7 +1322,7 @@ if __name__ == '__main__':
 
 
 
-# 示例:
+# Example:
 # python calculate_embeddings_hyenaDNA_1M.py ./dataset/pbm_forward.fasta pbm_forward_hyenaDNA.pt --device 1 --batch_size 100
 # RuntimeError: stack expects each tensor to be equal size, but got [1, 42, 256] at entry 0 and [1, 38, 256] at entry 35411
-# 对于输入序列长度不一致的,在右侧用N填充到固定的长度,需要对输出的结果进行处理,既要处理前后的两个特殊token,也要对序列长度进行处理
+# For unequal input lengths, right-pad with N to a fixed length; handle both boundary special tokens and sequence lengths when processing outputs.

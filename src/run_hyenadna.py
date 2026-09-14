@@ -16,28 +16,28 @@ from protein_dna.processing import (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "计算一条或多条5′→3′ DNA链的HyenaDNA特征；生成逐链、固定长度"
-            "和平均池化特征。"
+            "Compute HyenaDNA embeddings for one or more 5′→3′ DNA chains; generate per-chain, fixed-length "
+            "and mean-pooled embeddings."
         )
     )
-    parser.add_argument("--sample-id", required=True, help="样本唯一ID")
+    parser.add_argument("--sample-id", required=True, help="Unique sample ID")
     parser.add_argument(
         "--chain",
         action="append",
         required=True,
-        help="DNA链，格式为 DNA_1=AGCT；多条链重复使用该参数",
+        help="DNA chain as DNA_1=AGCT; repeat this option for multiple chains",
     )
     parser.add_argument(
         "--mode",
         choices=["auto", "compatible", "experimental"],
         default="auto",
-        help="auto：1/2链兼容，3链以上实验模式",
+        help="auto: compatible with one or two chains; experimental mode for three or more chains",
     )
     parser.add_argument(
         "--checkpoint-root",
         default=os.environ.get("PREMPNI_MODEL_ROOT", "/opt/prempni/models") + "/hyenadna",
     )
-    parser.add_argument("--device", default="cuda:0", help="例如1、cuda:1或cpu")
+    parser.add_argument("--device", default="cuda:0", help="For example 1, cuda:1 or cpu")
     parser.add_argument(
         "--output-root",
         default=os.environ.get("PREMPNI_OUTPUT_ROOT", "/output") + "/protein_dna",
@@ -65,18 +65,18 @@ def main() -> None:
             overwrite=args.overwrite,
         )
     except (ValueError, FileNotFoundError, FileExistsError, RuntimeError) as error:
-        parser.exit(2, f"错误：{error}\n")
+        parser.exit(2, f"Error: {error}\n")
 
-    print(f"Sample_ID：{result.sample_id}")
-    print(f"处理模式：{result.mode}")
-    print(f"逐链特征：{result.chain_embeddings_path}")
-    print(f"固定长度特征：{result.fixed_embedding_path}")
-    print(f"固定长度mask：{result.fixed_mask_path}")
-    print(f"平均池化特征：{result.mean_embedding_path}")
-    print(f"训练兼容特征：{result.combined_embedding_path}")
-    print(f"元数据：{result.metadata_path}")
+    print(f"Sample_ID: {result.sample_id}")
+    print(f"Processing mode: {result.mode}")
+    print(f"Per-chain embeddings: {result.chain_embeddings_path}")
+    print(f"Fixed-length embeddings: {result.fixed_embedding_path}")
+    print(f"Fixed-length mask: {result.fixed_mask_path}")
+    print(f"Mean-pooled embeddings: {result.mean_embedding_path}")
+    print(f"Training-compatible embeddings: {result.combined_embedding_path}")
+    print(f"Metadata: {result.metadata_path}")
     for warning in result.warnings:
-        print(f"警告：{warning}")
+        print(f"Warning: {warning}")
 
 
 if __name__ == "__main__":

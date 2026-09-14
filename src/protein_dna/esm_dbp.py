@@ -65,8 +65,8 @@ def protein_length_warnings(sequence: str) -> tuple[str, ...]:
     if len(sequence) <= RECOMMENDED_MAX_PROTEIN_LENGTH:
         return ()
     return (
-        f"蛋白质长度 {len(sequence)} 超过训练建议长度 "
-        f"{RECOMMENDED_MAX_PROTEIN_LENGTH}；仍继续计算。",
+        f"Protein length {len(sequence)} exceeds the recommended training length "
+        f"{RECOMMENDED_MAX_PROTEIN_LENGTH}; continuing computation.",
     )
 
 
@@ -74,8 +74,8 @@ def validate_protein_name(protein_name: str) -> str:
     protein_name = protein_name.strip()
     if not PROTEIN_NAME_PATTERN.fullmatch(protein_name):
         raise ValueError(
-            "蛋白质名称只能包含英文字母、数字、点、下划线和连字符，"
-            "并且必须以字母或数字开头。"
+            "Protein names may contain only ASCII letters, digits, dots, underscores and hyphens, "
+            "and must start with a letter or digit."
         )
     return protein_name
 
@@ -84,7 +84,7 @@ def validate_sequence(sequence: str) -> str:
     """Normalize case/whitespace and require the 20 standard amino acids."""
     sequence = re.sub(r"\s+", "", sequence).upper()
     if not sequence:
-        raise ValueError("蛋白质序列不能为空。")
+        raise ValueError("Protein sequence must not be empty.")
 
     invalid_positions = [
         (index, residue)
@@ -97,10 +97,10 @@ def validate_sequence(sequence: str) -> str:
             for position, residue in invalid_positions[:10]
         )
         if len(invalid_positions) > 10:
-            details += f", ...（共 {len(invalid_positions)} 处）"
+            details += f", ... ({len(invalid_positions)} positions total)"
         raise ValueError(
-            "蛋白质序列含有非标准氨基酸；只允许 "
-            f"{''.join(sorted(STANDARD_AMINO_ACIDS))}。异常位置：{details}"
+            "Protein sequence contains nonstandard amino acids; allowed residues: "
+            f"{''.join(sorted(STANDARD_AMINO_ACIDS))}. Invalid positions: {details}"
         )
     return sequence
 
@@ -109,27 +109,27 @@ def validate_mutation(mutation_text: str, sequence: str) -> Mutation:
     mutation_text = mutation_text.strip().upper()
     match = MUTATION_PATTERN.fullmatch(mutation_text)
     if match is None:
-        raise ValueError("突变格式错误，应使用类似 A10V 的格式。")
+        raise ValueError("Invalid mutation format; use a substitution such as A10V.")
 
     reference, position_text, alternate = match.groups()
     if reference not in STANDARD_AMINO_ACIDS:
-        raise ValueError(f"突变中的参考氨基酸 {reference!r} 不是标准氨基酸。")
+        raise ValueError(f"Reference residue {reference!r} is not a standard amino acid.")
     if alternate not in STANDARD_AMINO_ACIDS:
-        raise ValueError(f"突变中的目标氨基酸 {alternate!r} 不是标准氨基酸。")
+        raise ValueError(f"Alternate residue {alternate!r} is not a standard amino acid.")
     if reference == alternate:
-        raise ValueError("参考氨基酸和目标氨基酸相同，不构成突变。")
+        raise ValueError("Reference and alternate residues are identical; no substitution is specified.")
 
     position = int(position_text)
     if position > len(sequence):
         raise ValueError(
-            f"突变位置 {position} 超出序列长度 {len(sequence)}。"
+            f"Mutation position {position} exceeds sequence length {len(sequence)}."
         )
 
     sequence_residue = sequence[position - 1]
     if sequence_residue != reference:
         raise ValueError(
-            f"突变 {mutation_text} 与输入序列不一致：序列第 {position} 位是 "
-            f"{sequence_residue}，不是 {reference}。"
+            f"Mutation {mutation_text} does not match the input sequence: position {position} contains "
+            f"{sequence_residue}, not {reference}."
         )
     return Mutation(reference, position, alternate)
 
@@ -177,9 +177,9 @@ def ensure_wild_mutant_outputs_available(
     existing = [path for path in paths if path.exists()]
     if existing and not overwrite:
         raise FileExistsError(
-            "输出文件已存在："
+            "Output files already exist: "
             + ", ".join(str(path) for path in existing)
-            + "。如需覆盖，请添加 --overwrite。"
+            + ". Use --overwrite to replace existing files."
         )
 
 
@@ -190,7 +190,7 @@ def ensure_outputs_available(
     if existing and not overwrite:
         joined = ", ".join(str(path) for path in existing)
         raise FileExistsError(
-            f"输出文件已存在：{joined}。如需覆盖，请添加 --overwrite。"
+            f"Output files already exist: {joined}. Use --overwrite to replace existing files."
         )
 
 
@@ -201,11 +201,11 @@ class ESMDBPEmbedder:
         self.model_dir = Path(model_dir)
         self.device = torch.device(device)
         if self.device.type == "cuda" and not torch.cuda.is_available():
-            raise RuntimeError("指定了 CUDA，但当前 PyTorch 无法使用 CUDA。")
+            raise RuntimeError("CUDA was requested, but CUDA is unavailable in this PyTorch environment.")
 
         checkpoint_path = self.model_dir / "ESM-DBP.model"
         if not checkpoint_path.is_file():
-            raise FileNotFoundError(f"找不到 ESM-DBP 权重：{checkpoint_path}")
+            raise FileNotFoundError(f"ESM-DBP checkpoint not found: {checkpoint_path}")
 
         self.alphabet = esm.data.Alphabet.from_architecture("ESM-1b")
         self.batch_converter = self.alphabet.get_batch_converter()
@@ -251,11 +251,11 @@ class ESMDBPEmbedder:
         expected_shape = (len(sequence), EMBEDDING_DIM)
         if embeddings.shape != expected_shape:
             raise RuntimeError(
-                f"ESM-DBP 输出维度异常：期望 {expected_shape}，实际 "
-                f"{embeddings.shape}。"
+                f"Unexpected ESM-DBP output shape: expected {expected_shape}, got "
+                f"{embeddings.shape}."
             )
         if not np.isfinite(embeddings).all():
-            raise RuntimeError("ESM-DBP 输出中含有 NaN 或 Inf。")
+            raise RuntimeError("ESM-DBP output contains NaN or Inf.")
         return embeddings
 
     def run(
@@ -336,7 +336,7 @@ class ESMDBPEmbedder:
             muta_site.shape
         ) != (EMBEDDING_DIM,):
             raise RuntimeError(
-                "野生型或突变型位点特征维度异常；期望均为 (1280,)。"
+                "Unexpected wild-type or mutant site feature shape; both must be (1280,)."
             )
 
         wild_path, mutant_path, site_path, metadata_path = paths
@@ -391,28 +391,28 @@ class ESMDBPEmbedder:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "验证蛋白质序列和突变，计算完整 ESM-DBP 特征，并提取突变位点的 "
-            "1280维特征。"
+            "Validate the protein sequence and mutation, compute full ESM-DBP embeddings, and extract the mutation site's "
+            "1280-dimensional features."
         )
     )
-    parser.add_argument("--name", required=True, help="蛋白质名称")
-    parser.add_argument("--sequence", required=True, help="蛋白质氨基酸序列")
-    parser.add_argument("--mutation", required=True, help="突变，例如 A10V")
+    parser.add_argument("--name", required=True, help="Protein name")
+    parser.add_argument("--sequence", required=True, help="Protein amino acid sequence")
+    parser.add_argument("--mutation", required=True, help="Mutation, for example A10V")
     parser.add_argument(
         "--model-dir",
         default=os.environ.get("PREMPNI_MODEL_ROOT", "/opt/prempni/models") + "/esm_dbp",
-        help="包含 ESM-DBP.model 的目录",
+        help="Directory containing ESM-DBP.model",
     )
     parser.add_argument(
         "--output-dir",
         default=os.environ.get("PREMPNI_OUTPUT_ROOT", "/output") + "/protein_dna",
-        help="输出目录",
+        help="Output directory",
     )
-    parser.add_argument("--device", default="cpu", help="cpu、cuda 或 cuda:0")
+    parser.add_argument("--device", default="cpu", help="cpu, cuda or cuda:0")
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="允许覆盖同名输出文件",
+        help="Allow overwriting existing output files",
     )
     return parser
 
@@ -440,19 +440,19 @@ def main() -> None:
             overwrite=args.overwrite,
         )
     except (ValueError, FileNotFoundError, FileExistsError, RuntimeError) as error:
-        parser.exit(2, f"错误：{error}\n")
+        parser.exit(2, f"Error: {error}\n")
 
-    print(f"蛋白质：{result.protein_name}")
-    print(f"序列长度：{result.sequence_length}")
-    print(f"突变：{result.mutation.label}")
-    print(f"完整特征：{result.full_embedding_path}")
+    print(f"Protein: {result.protein_name}")
+    print(f"Sequence length: {result.sequence_length}")
+    print(f"Mutation: {result.mutation.label}")
+    print(f"Full embeddings: {result.full_embedding_path}")
     print(
-        "突变位点特征："
-        f"{result.mutation_embedding_path}，维度 "
+        "Mutation site features: "
+        f"{result.mutation_embedding_path}, shape "
         f"{result.mutation_embedding.shape}"
     )
     for warning in result.warnings:
-        print(f"警告：{warning}")
+        print(f"Warning: {warning}")
 
 
 if __name__ == "__main__":

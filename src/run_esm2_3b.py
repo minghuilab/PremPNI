@@ -16,22 +16,22 @@ from protein_rna.esm2_3b import (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "验证蛋白质序列和单点突变，分别计算野生型和突变型的"
-            "ESM-2(3B)特征，并提取两个2560维突变位点向量。"
+            "Validate the protein sequence and single-site mutation, compute wild-type and mutant "
+            "ESM-2(3B) embeddings, and extract two 2560-dimensional mutation site vectors."
         )
     )
-    parser.add_argument("--sample-id", required=True, help="样本唯一ID")
-    parser.add_argument("--sequence", required=True, help="野生型蛋白质序列")
-    parser.add_argument("--mutation", required=True, help="突变，例如 A10V")
+    parser.add_argument("--sample-id", required=True, help="Unique sample ID")
+    parser.add_argument("--sequence", required=True, help="Wild-type protein sequence")
+    parser.add_argument("--mutation", required=True, help="Mutation, for example A10V")
     parser.add_argument(
         "--model-location",
         default=os.environ.get("PREMPNI_MODEL_ROOT", "/opt/prempni/models") + "/esm2/esm2_t36_3B_UR50D.pt",
-        help="fair-esm模型名或本地模型文件路径",
+        help="fair-esm model name or local model file path",
     )
     parser.add_argument(
         "--device",
         default="cpu",
-        help="默认cpu；若指定cuda且FP32显存不足，会自动回退到cpu",
+        help="Default: cpu; CUDA falls back to CPU if FP32 GPU memory is insufficient",
     )
     parser.add_argument(
         "--output-root",
@@ -70,19 +70,19 @@ def main() -> None:
         RuntimeError,
         KeyError,
     ) as error:
-        parser.exit(2, f"错误：{error}\n")
+        parser.exit(2, f"Error: {error}\n")
 
-    print(f"Sample_ID：{result.sample_id}")
-    print(f"突变：{result.mutation.label}")
-    print(f"原始/实际计算长度：{result.sequence_length}/{result.embedded_length}")
-    print(f"实际设备与精度：{result.device} / float32")
-    print(f"野生型完整特征：{result.wild_type_embedding_path}")
-    print(f"突变型完整特征：{result.mutant_embedding_path}")
-    print(f"位点特征字典：{result.site_feature_path}")
-    print(f"wt_site维度：{tuple(result.wt_site.shape)}")
-    print(f"muta_site维度：{tuple(result.muta_site.shape)}")
+    print(f"Sample_ID: {result.sample_id}")
+    print(f"Mutation: {result.mutation.label}")
+    print(f"Original/embedded length: {result.sequence_length}/{result.embedded_length}")
+    print(f"Actual device and precision: {result.device} / float32")
+    print(f"Wild-type full embeddings: {result.wild_type_embedding_path}")
+    print(f"Mutant full embeddings: {result.mutant_embedding_path}")
+    print(f"Site feature dictionary: {result.site_feature_path}")
+    print(f"wt_site shape: {tuple(result.wt_site.shape)}")
+    print(f"muta_site shape: {tuple(result.muta_site.shape)}")
     for warning in result.warnings:
-        print(f"警告：{warning}")
+        print(f"Warning: {warning}")
 
 
 if __name__ == "__main__":

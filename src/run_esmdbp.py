@@ -17,18 +17,18 @@ from protein_dna.esm_dbp import (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "计算野生型和突变型蛋白质的ESM-DBP完整特征，并提取同一突变位点"
-            "的两个1280维向量。"
+            "Compute full ESM-DBP embeddings for wild-type and mutant proteins and extract "
+            "two 1280-dimensional vectors at the mutation site."
         )
     )
-    parser.add_argument("--sample-id", required=True, help="样本唯一ID")
-    parser.add_argument("--sequence", required=True, help="野生型蛋白质序列")
-    parser.add_argument("--mutation", required=True, help="突变，例如A10V")
+    parser.add_argument("--sample-id", required=True, help="Unique sample ID")
+    parser.add_argument("--sequence", required=True, help="Wild-type protein sequence")
+    parser.add_argument("--mutation", required=True, help="Mutation, for example A10V")
     parser.add_argument(
         "--model-dir",
         default=os.environ.get("PREMPNI_MODEL_ROOT", "/opt/prempni/models") + "/esm_dbp",
     )
-    parser.add_argument("--device", default="cpu", help="cpu、cuda或cuda:0")
+    parser.add_argument("--device", default="cpu", help="cpu, cuda or cuda:0")
     parser.add_argument(
         "--output-root",
         default=os.environ.get("PREMPNI_OUTPUT_ROOT", "/output") + "/protein_dna",
@@ -65,18 +65,18 @@ def main() -> None:
             overwrite=args.overwrite,
         )
     except (ValueError, FileNotFoundError, FileExistsError, RuntimeError) as error:
-        parser.exit(2, f"错误：{error}\n")
+        parser.exit(2, f"Error: {error}\n")
 
-    print(f"Sample_ID：{result.sample_id}")
-    print(f"蛋白质：{result.protein_name}")
-    print(f"突变：{result.mutation.label}")
-    print(f"野生型完整特征：{result.wild_type_embedding_path}")
-    print(f"突变型完整特征：{result.mutant_embedding_path}")
-    print(f"位点特征字典：{result.site_feature_path}")
-    print(f"wt_site维度：{tuple(result.wt_site.shape)}")
-    print(f"muta_site维度：{tuple(result.muta_site.shape)}")
+    print(f"Sample_ID: {result.sample_id}")
+    print(f"Protein: {result.protein_name}")
+    print(f"Mutation: {result.mutation.label}")
+    print(f"Wild-type full embeddings: {result.wild_type_embedding_path}")
+    print(f"Mutant full embeddings: {result.mutant_embedding_path}")
+    print(f"Site feature dictionary: {result.site_feature_path}")
+    print(f"wt_site shape: {tuple(result.wt_site.shape)}")
+    print(f"muta_site shape: {tuple(result.muta_site.shape)}")
     for warning in result.warnings:
-        print(f"警告：{warning}")
+        print(f"Warning: {warning}")
 
 
 if __name__ == "__main__":
