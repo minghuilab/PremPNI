@@ -105,7 +105,7 @@ RNA results use `output/protein_rna/1AUD/prediction/`; multi-complex results use
 
 ## Datasets
 
-Download the final Excel datasets below. Matching TSV exports, field descriptions and SHA-256 checksums are available in the [data directory](datasets/README.md).
+Download the Excel datasets below. See the [data guide](datasets/README.md) for a brief description.
 
 | Dataset | Interaction | Records | Contents |
 | --- | --- | ---: | --- |
@@ -113,10 +113,6 @@ Download the final Excel datasets below. Matching TSV exports, field description
 | [S1150](datasets/S1150.xlsx) | Protein–RNA | 1,150 | Sequence-model training records: mutation, sequences and experimental ΔΔG |
 | [S1336](datasets/S1336.xlsx) | Protein–DNA | 1,336 | Identifiers, S441 membership, 20 features, experimental ΔΔG, PremPDI2 and structure-model predictions |
 | [S599](datasets/S599.xlsx) | Protein–RNA | 599 | Identifiers, S260 membership, 13 features, experimental ΔΔG, PremPRI2 and structure-model predictions |
-
-Supplementary data: [S1 — revisions and exclusions](datasets/Supplementary_Data_S1_10.10.xlsx), [S2 — curated experimental records](datasets/Supplementary_Data_S2_10.10.xlsx), [S3 — handcrafted feature definitions](datasets/Supplementary_Data_S3_10.10.xlsx).
-
-Download current data from this repository; the published Docker image has not been rebuilt with this data update.
 
 ## Citation
 
