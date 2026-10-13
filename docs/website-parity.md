@@ -1,6 +1,6 @@
-# Website and Docker v0.2.0
+# Website and Docker
 
-Docker v0.2.0 implements the public website's scientific input and result conventions. The reference website releases are `20260910-readability-v6` and `20260910-csv-precision-v5`.
+Docker implements the website's scientific input and result conventions described below.
 
 | Behavior | Shared contract |
 | --- | --- |
@@ -18,8 +18,8 @@ Docker v0.2.0 implements the public website's scientific input and result conven
 | Failure output | No numeric prediction and no stability classification; retain error and input |
 | Downloads | Full inputs, final ensemble predictions and timing; no individual submodel predictions in public result files |
 
-The six final MLP checkpoint hashes match the website inference pipeline's configured default model paths. All 13 assets in the base v0.1.1 image passed the manifest check; v0.2.0 inherits these immutable model layers without replacing weights. CPU and GPU arithmetic can differ slightly. A matched-input CPU regression checks model continuity; this does not claim a bitwise CPU/GPU comparison.
+The six final MLP checkpoint hashes were verified against the website inference pipeline. All 13 assets in the base image passed the manifest check; the Dockerfile inherits these immutable model layers. CPU and GPU arithmetic can differ slightly. The smoke test checks the bundled examples against reference CPU predictions.
 
 Docker now defaults to CPU, records local Job IDs, submission/start/completion timestamps and progress in `job.json`, and preserves results in the mounted output directory. Jobs run sequentially within that invocation. The website supplies a shared queue, public result lookup and email notifications; these hosted-service functions are not installed or configured by the local CLI. Local Job IDs are not public website Job IDs. Docker's total processing time includes subprocess startup and local model loading, so it need not match server job latency.
 
-The website batches model calculations; Docker v0.2.0 isolates independent mutations in subprocesses for predictable memory lifetime. Both implement the same mutation semantics, while throughput and job scheduling differ. CSV failure status is recorded per mutation in Docker collections so successful rows remain usable even when another mutation fails. Models, experimental datasets and the live website were not modified by this interface alignment.
+The website batches model calculations; Docker isolates independent mutations in subprocesses for predictable memory lifetime. Both implement the same mutation semantics, while throughput and job scheduling differ. CSV failure status is recorded per mutation in Docker collections so successful rows remain usable even when another mutation fails.

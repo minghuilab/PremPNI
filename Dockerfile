@@ -1,9 +1,7 @@
 # Reuse the verified runtime and immutable model layers; no model retraining.
 FROM ghcr.io/minghuilab/prempni@sha256:befc7207e644c957fb79ff54e5c42ccac27ff53b5ff3f2353b85ee86043fce23
 
-ARG PREMPNI_VERSION=0.2.1
 LABEL org.opencontainers.image.title="PremPNI" \
-      org.opencontainers.image.version="${PREMPNI_VERSION}" \
       org.opencontainers.image.description="CPU-first PremPNI with website-compatible inputs and results" \
       org.opencontainers.image.source="https://github.com/minghuilab/PremPNI"
 

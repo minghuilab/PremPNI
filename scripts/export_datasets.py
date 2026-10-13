@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
-"""Export the author-designated curated workbook without altering scientific values.
+"""Copy the approved workbooks unchanged and export their four dataset sheets.
 
-Requires openpyxl (data preparation only, not an inference dependency).
+Requires openpyxl for read-only extraction (not an inference dependency).
 Run from the repository: python scripts/export_datasets.py
+To import the approved originals, pass --source-dir /path/to/final/files.
 """
 import argparse
 import csv
 import hashlib
+import io
 import json
-import math
-import re
 from pathlib import Path
 
 import openpyxl
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_SHA256 = "23efe7455ea7085d9d913f66cae6df04a292398dea1a53991b482ad4e7791248"
-SCHEMAS = {
-    "S1664": ["Mutation", "Protein_sequence", "Nucleic_acid_sequence", "DDG"],
-    "S1150": ["Mutation", "Protein_sequence", "Nucleic_acid_sequence", "DDG"],
-    "S1336": ["PDB_mutation", "DDG", "PremPDI2_prediction"],
-    "S599": ["PDB_mutation", "DDG", "PremPRI2_prediction"],
+SOURCE_HASHES = {
+    "S1336.xlsx": "3c4c27837ee0237c69bff06791ce1a6999cdf474f8f9bde4427a25f960ffee21",
+    "S599.xlsx": "b149704f174c3a5f186fbb7ccc9c29cd5e57c0e2732e6119ec628f450e08137a",
+    "S1664.xlsx": "fdcb22e4297c9cf44a1d9e371d0034bed16c2e8d4f6e08b6cf82cf3f01e9cb97",
+    "S1150.xlsx": "24dd58d555ef98b34033163784b8950961a65dc60bffe4ab31cfc1214d6bd327",
+    "Supplementary_Data_S1_10.10.xlsx": "dfd8cac8ecfe87467c231189c899590ca086104495464c9c606613820b7ddabb",
+    "Supplementary_Data_S2_10.10.xlsx": "3c69cc1dfb3e7df005f8f315f02e7f2f245da1b92f601684680c3b7ef1081403",
+    "Supplementary_Data_S3_10.10.xlsx": "83a3a0e073d2eb310fc2fc4d3e02195a5114b3aa37063d53e0b67e730ed31a03",
 }
+DATASETS = {"S1336": (1336, 29), "S599": (599, 22), "S1664": (1664, 4), "S1150": (1150, 4)}
+
+
+def digest(content):
+    return hashlib.sha256(content).hexdigest()
 
 
 def require(condition, message):
@@ -29,55 +36,58 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=ROOT / "datasets/PremPNI_curated_datasets.xlsx")
+    parser.add_argument("--source-dir", type=Path, default=ROOT / "datasets")
     parser.add_argument("--output", type=Path, default=ROOT / "datasets")
     args = parser.parse_args()
-    require(digest(args.source) == SOURCE_SHA256, "Unexpected source workbook version")
-    book = openpyxl.load_workbook(args.source, read_only=True, data_only=False)
-    require(set(book.sheetnames) == set(SCHEMAS), "Unexpected worksheet set")
-    report = {"version": "2026-09-09", "source_file": "PremPNI_curated_datasets.xlsx", "source_sha256": SOURCE_SHA256, "datasets": {}}
+    require(args.source_dir.resolve() != args.output.resolve() or args.output.resolve() == (ROOT / "datasets").resolve(),
+            "Use a separate output directory to preserve the original source directory")
+    report = {"version": "2026-10-13", "workbooks": {}, "datasets": {}}
     prepared = {}
-    for name, schema in SCHEMAS.items():
-        values = list(book[name].values)
-        header, rows = list(values[0]), values[1:]
-        require(header == schema, name + ": unexpected columns")
-        require(len(rows) == int(name[1:]), name + ": unexpected record count")
-        records = [dict(zip(header, row)) for row in rows]
-        require(not any(isinstance(v, str) and v.startswith("=") for row in rows for v in row), name + ": unexpected formula")
-        for record in records:
-            for key in (k for k in header if k == "DDG" or k.endswith("_prediction")):
-                require(isinstance(record[key], (int, float)) and math.isfinite(record[key]), name + ": missing/nonfinite " + key)
-            if "Mutation" in record:
-                mutation = re.fullmatch(r"([ACDEFGHIKLMNPQRSTVWY])([1-9][0-9]*)([ACDEFGHIKLMNPQRSTVWY])", record["Mutation"])
-                require(mutation is not None, name + ": malformed mutation")
-                wt, position, _ = mutation.groups()
-                protein = record["Protein_sequence"]
-                require(bool(protein) and set(protein) <= set("ACDEFGHIKLMNPQRSTVWY"), name + ": invalid protein")
-                require(int(position) <= len(protein) and protein[int(position)-1] == wt, name + ": sequence position mismatch")
-                chains = record["Nucleic_acid_sequence"].split("|")
-                alphabet = set("ACGT" if name == "S1664" else "ACGU")
-                require(all(c and set(c) <= alphabet for c in chains), name + ": invalid nucleic-acid sequence")
-        if "PDB_mutation" in header:
-            require(len({r["PDB_mutation"] for r in records}) == len(records), name + ": duplicate mutation identifier")
-        report["datasets"][name] = {"rows": len(rows), "columns": header}
-        prepared[name] = (header, rows)
-    book.close()
+    for filename, expected_hash in SOURCE_HASHES.items():
+        content = (args.source_dir / filename).read_bytes()
+        require(digest(content) == expected_hash, filename + ": unexpected source workbook version")
+        prepared[filename] = content
+        book = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=False)
+        sheets = {}
+        try:
+            for sheet in book:
+                rows = list(sheet.values)
+                if sheet.title == "README":
+                    sheets[sheet.title] = {"description": rows[0][0]}
+                    continue
+                header = list(rows[0])
+                sheets[sheet.title] = {"rows": len(rows) - 1, "columns": header}
+                name = Path(filename).stem
+                if name not in DATASETS or sheet.title != name:
+                    continue
+                count, columns = DATASETS[name]
+                require(len(rows) == count + 1 and len(header) == columns, name + ": unexpected table dimensions")
+                require(not any(cell.data_type == "f" for row in sheet for cell in row), name + ": formulas require an explicit export policy")
+                if name == "S1150":
+                    require("Record ID" not in header and "Mutant protein sequence" not in header,
+                            "S1150: removed columns must not be restored")
+                output = io.StringIO(newline="")
+                csv.writer(output, delimiter="\t", lineterminator="\n").writerows(rows)
+                tsv_name = name + ".tsv"
+                prepared[tsv_name] = output.getvalue().encode("utf-8")
+                report["datasets"][name] = {
+                    "source_file": filename, "source_sheet": name, "rows": count,
+                    "columns": header, "tsv_file": tsv_name, "tsv_sha256": digest(prepared[tsv_name]),
+                }
+        finally:
+            book.close()
+        report["workbooks"][filename] = {"sha256": expected_hash, "bytes": len(content), "sheets": sheets}
+    require(set(report["datasets"]) == set(DATASETS), "Missing dataset worksheet")
+    # Finish validation of every source before writing any output.
     args.output.mkdir(parents=True, exist_ok=True)
-    for name, (header, rows) in prepared.items():
-        path = args.output / (name + ".tsv")
-        with path.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
-            writer.writerow(header)
-            writer.writerows(rows)
-        report["datasets"][name]["sha256"] = digest(path)
-    (args.output / "manifest.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({name: value["rows"] for name, value in report["datasets"].items()}))
+    for filename, content in prepared.items():
+        destination = args.output / filename
+        if not destination.exists() or destination.read_bytes() != content:
+            destination.write_bytes(content)
+    (args.output / "manifest.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print("Verified 7 original workbooks and exported 4 dataset sheets without reordering or changing fields.")
 
 
 if __name__ == "__main__":
