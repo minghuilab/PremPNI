@@ -11,7 +11,7 @@ bash software/scripts/prempni.sh --help
 
 The image currently requires access to the GHCR package. If `docker pull` is denied, sign in with an authorized GitHub account using `docker login ghcr.io`.
 
-The launcher uses the image's CPU defaults, saves results in `output/`, and makes files in the local `input/` directory available as `/input/` inside the container. See the [README](../../README.md) for DNA, RNA and batch-input commands.
+The launcher uses the image's CPU defaults, saves results in `output/`, and makes files in the local `input/` directory available as `/input/` inside the container. See [usage and input formats](../../examples/README.md) for DNA, RNA and batch-input commands.
 
 Use Linux x86_64 with Docker Engine 24 or newer. Allow at least 30 GB free disk; 64 GB RAM is a practical starting point for RNA predictions.
 
