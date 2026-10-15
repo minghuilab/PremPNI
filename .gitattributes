@@ -1,6 +1,0 @@
-# Preserve reproducible data hashes and portable shell scripts on all platforms.
-datasets/*.xlsx binary
-examples/*.sh text eol=lf
-software/scripts/*.sh text eol=lf
-software/src/*.py text eol=lf
-software/src/tests/*.py text eol=lf
