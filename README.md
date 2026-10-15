@@ -1,6 +1,6 @@
 # PremPNI
 
-PremPNI predicts mutation-induced changes in protein–DNA and protein–RNA binding affinity from a wild-type protein sequence, nucleic-acid sequences and a single-site protein mutation. No three-dimensional complex structure is required. Predictions are ΔΔG values in kcal/mol.
+PremPNI predicts the effects of single-site protein mutations on protein–DNA and protein–RNA binding affinity using PremPDI2 and PremPRI2, respectively. It requires only protein and nucleic acid sequences, without a three-dimensional structure. Each mutation is evaluated separately, and predictions are reported as binding free energy changes (ΔΔG, kcal/mol).
 
 Use the [PremPNI web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) or the standalone Docker workflow below.
 
