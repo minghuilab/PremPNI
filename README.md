@@ -10,10 +10,10 @@ Use the [PremPNI web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) o
 git clone https://github.com/minghuilab/PremPNI.git
 cd PremPNI
 docker pull ghcr.io/minghuilab/prempni
-bash scripts/prempni.sh --help
+bash software/scripts/prempni.sh --help
 ```
 
-The image includes the runtime, embedding models and prediction weights; no separate Hugging Face model download is needed. The GHCR package currently requires package access; use `docker login ghcr.io` with an authorized GitHub account if `docker pull` is denied. See the [installation guide](docs/installation.md) for system requirements and source builds.
+The image includes the runtime, embedding models and prediction weights; no separate Hugging Face model download is needed. The GHCR package currently requires package access; use `docker login ghcr.io` with an authorized GitHub account if `docker pull` is denied. See the [installation guide](software/docs/installation.md) for system requirements and source builds.
 
 ## Input
 
@@ -36,7 +36,7 @@ Run these Bash commands from the cloned repository on Linux or WSL2 with Docker.
 ### Protein–DNA
 
 ```bash
-bash scripts/prempni.sh \
+bash software/scripts/prempni.sh \
   --complex-type dna \
   --sample-id 2KO0 \
   --protein-sequence MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR \
@@ -48,7 +48,7 @@ bash scripts/prempni.sh \
 ### Protein–RNA
 
 ```bash
-bash scripts/prempni.sh \
+bash software/scripts/prempni.sh \
   --complex-type rna \
   --sample-id 1AUD \
   --protein-sequence AVPETRPNHTIYINNLNEKIKKDELKKSLHAIFSRFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFV \
@@ -69,17 +69,17 @@ For one protein complex, replace `--mutation A39T` with **one** of:
 Use the same downloadable JSON or five-column TSV as the website:
 
 ```bash
-bash scripts/prempni.sh \
+bash software/scripts/prempni.sh \
   --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
 
-bash scripts/prempni.sh \
+bash software/scripts/prempni.sh \
   --input-json /opt/prempni/examples/prempni_dna_example.json
 ```
 
 For your own TSV file, save it as `input/complexes.tsv` inside the repository and run:
 
 ```bash
-bash scripts/prempni.sh --input-tsv /input/complexes.tsv
+bash software/scripts/prempni.sh --input-tsv /input/complexes.tsv
 ```
 
 For JSON input, save `input/request.json` and use `--input-json /input/request.json`.
@@ -111,8 +111,8 @@ Download the Excel datasets below. See the [data guide](datasets/README.md) for 
 | --- | --- | ---: | --- |
 | [S1664](datasets/S1664.xlsx) | Protein–DNA | 1,664 | Sequence-model training records: mutation, sequences and experimental ΔΔG |
 | [S1150](datasets/S1150.xlsx) | Protein–RNA | 1,150 | Sequence-model training records: mutation, sequences and experimental ΔΔG |
-| [S1336](datasets/S1336.xlsx) | Protein–DNA | 1,336 | Identifiers, S441 membership, 20 features, experimental ΔΔG, PremPDI2 and structure-model predictions |
-| [S599](datasets/S599.xlsx) | Protein–RNA | 599 | Identifiers, S260 membership, 13 features, experimental ΔΔG, PremPRI2 and structure-model predictions |
+| [S1336](datasets/S1336.xlsx) | Protein–DNA | 1,336 | Identifiers, S441 membership, experimental ΔΔG, PremPDI2 and structure-model predictions |
+| [S599](datasets/S599.xlsx) | Protein–RNA | 599 | Identifiers, S260 membership, experimental ΔΔG, PremPRI2 and structure-model predictions |
 
 ## Citation
 
@@ -120,4 +120,4 @@ The PremPNI article citation and DOI will be added after publication. Until then
 
 ## License
 
-PremPNI is available for academic, non-commercial use only. See [LICENSE](LICENSE). Third-party components retain their original licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+PremPNI is available for academic, non-commercial use only. See [LICENSE](LICENSE). Third-party components retain their original licenses; see [THIRD_PARTY_NOTICES.md](software/licenses/THIRD_PARTY_NOTICES.md).

@@ -22,7 +22,7 @@ evaluation, subject to the following conditions:
    as part of another container or software package, requires prior written
    permission from the copyright holder.
 5. Third-party software and model assets bundled with or used by PremPNI remain
-   subject to their respective licenses. See THIRD_PARTY_NOTICES.md.
+   subject to their respective licenses. See software/licenses/THIRD_PARTY_NOTICES.md.
 
 THE SOFTWARE AND MODEL WEIGHTS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
 KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF

@@ -12,12 +12,15 @@ ENV PREMPNI_PROTEIN_DEVICE=cpu \
     MKL_NUM_THREADS=10
 
 WORKDIR /opt/prempni
-COPY src/ /opt/prempni/
-COPY scripts/ /opt/prempni/scripts/
+COPY software/src/ /opt/prempni/
+COPY software/scripts/ /opt/prempni/scripts/
 COPY examples/ /opt/prempni/examples/
 COPY datasets/ /opt/prempni/datasets/
-COPY docs/ /opt/prempni/docs/
-COPY README.md LICENSE THIRD_PARTY_NOTICES.md MODEL_MANIFEST.sha256 /opt/prempni/
+COPY software/docs/ /opt/prempni/docs/
+COPY README.md LICENSE /opt/prempni/
+COPY software/licenses/ /opt/prempni/software/licenses/
+COPY software/docker/MODEL_MANIFEST.sha256 /opt/prempni/MODEL_MANIFEST.sha256
+COPY software/requirements.txt /opt/prempni/requirements.txt
 RUN python -m unittest discover -s tests -p test_web_contract.py
 ENTRYPOINT ["python", "/opt/prempni/run_prempni.py"]
 CMD ["--help"]

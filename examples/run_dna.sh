@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-bash "$script_dir/../scripts/prempni.sh" \
+bash "$script_dir/../software/scripts/prempni.sh" \
   --complex-type dna \
   --sample-id 2KO0 \
   --protein-sequence MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR \

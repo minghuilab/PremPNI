@@ -4,8 +4,8 @@ Download the four datasets as Excel workbooks. Each workbook contains a `README`
 
 | Dataset | Interaction | Records | Contents |
 | --- | --- | ---: | --- |
-| [S1336](S1336.xlsx) | Protein–DNA | 1,336 | Complex and mutation identifiers, S441 membership, 20 handcrafted features, experimental ΔΔG and model predictions |
-| [S599](S599.xlsx) | Protein–RNA | 599 | Complex and mutation identifiers, S260 membership, 13 handcrafted features, experimental ΔΔG and model predictions |
+| [S1336](S1336.xlsx) | Protein–DNA | 1,336 | Complex and mutation identifiers, S441 membership, experimental ΔΔG and model predictions |
+| [S599](S599.xlsx) | Protein–RNA | 599 | Complex and mutation identifiers, S260 membership, experimental ΔΔG and model predictions |
 | [S1664](S1664.xlsx) | Protein–DNA | 1,664 | Sequence-model training records: mutation, wild-type protein sequence, nucleic acid sequence and experimental ΔΔG |
 | [S1150](S1150.xlsx) | Protein–RNA | 1,150 | Sequence-model training records: mutation, wild-type protein sequence, nucleic acid sequence and experimental ΔΔG |
 

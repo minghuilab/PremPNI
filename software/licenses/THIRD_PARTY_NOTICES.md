@@ -16,7 +16,7 @@ subject to their original terms.
 | OmegaConf | HyenaDNA checkpoint configuration | BSD-3-Clause | https://github.com/omry/omegaconf |
 
 License texts for the bundled pretrained-model projects are under
-`third_party_licenses/`. License files for Python runtime packages are also
+`third_party/`. License files for Python runtime packages are also
 retained in their original `site-packages/*dist-info` directories inside the
 image. Users must follow the citation and attribution requests documented by
 each upstream project.
