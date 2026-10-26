@@ -2,9 +2,9 @@
 
 **PremPNI** predicts changes in protein–nucleic acid binding affinity caused by single amino acid substitutions. PremPDI2 is used for protein–DNA interactions and PremPRI2 for protein–RNA interactions. Only the wild-type protein sequence, the binding DNA or RNA sequences, and the substitution to be tested are required; no three-dimensional structure is needed.
 
-[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](#install) · [Usage and input formats](Examples/README.md)
+[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](#installation) · [Usage and input formats](Examples/README.md)
 
-## Install
+## Installation
 
 Install [Docker](https://docs.docker.com/get-started/get-docker/), then run:
 
