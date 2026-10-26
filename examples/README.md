@@ -15,8 +15,8 @@ Run commands from the repository root. The launcher saves results in `output/` a
 bash examples/run_dna.sh
 bash examples/run_rna.sh
 
-bash software/scripts/prempni.sh --input-json /opt/prempni/examples/prempni_dna_example.json
-bash software/scripts/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+bash examples/prempni.sh --input-json /opt/prempni/examples/prempni_dna_example.json
+bash examples/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
 ```
 
 ## Custom inputs
@@ -24,9 +24,9 @@ bash software/scripts/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_compl
 Adapt an example JSON or TSV, save it in `input/`, then run:
 
 ```bash
-bash software/scripts/prempni.sh --input-json /input/request.json
+bash examples/prempni.sh --input-json /input/request.json
 # Or:
-bash software/scripts/prempni.sh --input-tsv /input/complexes.tsv
+bash examples/prempni.sh --input-tsv /input/complexes.tsv
 ```
 
 Protein sequences use the 20 standard amino acids; DNA uses A/C/G/T and RNA uses A/C/G/U. Supply nucleic-acid chains in the 5′→3′ direction. Mutation positions start at 1 in the supplied wild-type protein sequence; PDB/literature numbering may require mapping.
@@ -60,5 +60,3 @@ In the [DNA command](run_dna.sh), replace `--mutation A39T` with one of:
 - DNA example: `output/protein_dna/2KO0/prediction/`
 - RNA example: `output/protein_rna/1AUD/prediction/`
 - Multiple complexes: `output/collections/JOB_ID/`
-
-[The smoke test](../software/scripts/smoke_test.sh) records and checks reference CPU predictions for these website examples. See the [installation check](../software/docs/installation.md#check-the-installation) for the command.

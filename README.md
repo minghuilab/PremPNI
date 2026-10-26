@@ -2,7 +2,7 @@
 
 PremPNI predicts binding ΔΔG (kcal/mol) for single-site protein mutations: **PremPDI2** for DNA and **PremPRI2** for RNA. Inputs are protein and nucleic acid sequences plus mutations; no 3D structure is required. Mutations are evaluated independently.
 
-[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](software/docs/installation.md) · [Usage and input formats](examples/README.md)
+[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](#install) · [Usage and input formats](examples/README.md)
 
 ## Install
 
@@ -14,7 +14,7 @@ GHCR package access is currently required; authenticate with an authorized accou
 git clone https://github.com/minghuilab/PremPNI.git
 cd PremPNI
 docker pull ghcr.io/minghuilab/prempni
-bash software/scripts/prempni.sh --help
+bash examples/prempni.sh --help
 ```
 
 ## Run a prediction
@@ -24,7 +24,7 @@ Run the following commands from the `PremPNI` directory. Predictions use CPU by 
 ### Protein–DNA
 
 ```bash
-bash software/scripts/prempni.sh \
+bash examples/prempni.sh \
   --complex-type dna \
   --sample-id 2KO0 \
   --protein-sequence MVQSCSAYGCKNRYDKDKPVSFHKFPLTRPSLCKEWEAAVRRKNFKPTKYSSICSEHFTPDSFKRESNNKLLKENAVPTIFLELVPR \
@@ -36,7 +36,7 @@ bash software/scripts/prempni.sh \
 ### Protein–RNA
 
 ```bash
-bash software/scripts/prempni.sh \
+bash examples/prempni.sh \
   --complex-type rna \
   --sample-id 1AUD \
   --protein-sequence AVPETRPNHTIYINNLNEKIKKDELKKSLHAIFSRFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFV \
@@ -81,4 +81,4 @@ See the [data guide](datasets/README.md) for contents.
 
 ## License
 
-Academic, non-commercial use only. [License](LICENSE) · [Third-party notices](software/licenses/THIRD_PARTY_NOTICES.md).
+Academic, non-commercial use only. [License](LICENSE) · [Third-party notices](licenses/THIRD_PARTY_NOTICES.md).
