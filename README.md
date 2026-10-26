@@ -6,9 +6,7 @@
 
 ## Install
 
-Linux x86_64 or WSL2 with Docker. The image includes the runtime and model weights.
-
-GHCR package access is currently required; authenticate with an authorized account via `docker login ghcr.io`.
+Install [Docker](https://docs.docker.com/get-started/get-docker/), then run:
 
 ```bash
 git clone https://github.com/minghuilab/PremPNI.git
