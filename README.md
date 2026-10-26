@@ -24,7 +24,6 @@ Run the following commands from the `PremPNI` directory. Predictions use CPU by 
 ```bash
 bash Examples/prempni.sh \
   --complex-type dna \
-  --sample-id S1664_C_61_AlaScan_001 \
   --protein-sequence MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK \
   --mutation M1A \
   --chain DNA_1=CTCGACCGGTCGAG \
@@ -36,23 +35,22 @@ bash Examples/prempni.sh \
 ```bash
 bash Examples/prempni.sh \
   --complex-type rna \
-  --sample-id S1150_C_81_AlaScan_001 \
   --protein-sequence MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK \
   --mutation M1A \
   --chain RNA_1=GGCAGAUCUGAGCCUGGGAGCUCUCUGCC
 ```
 
-For your own data, replace the sample ID, wild-type protein sequence, mutation and nucleic-acid sequences. `M1A` replaces methionine at position 1 with alanine; positions start at 1 in the supplied protein sequence. Use one `--chain NAME=SEQUENCE` per nucleic-acid chain, written in the 5′→3′ direction (T for DNA, U for RNA).
+For your own data, replace the wild-type protein sequence, mutation and nucleic-acid sequences. `M1A` replaces methionine at position 1 with alanine; positions start at 1 in the supplied protein sequence. Use one `--chain NAME=SEQUENCE` per nucleic-acid chain, written in the 5′→3′ direction (T for DNA, U for RNA).
 
-Choose a new `--sample-id` for each run, or add `--overwrite` to replace an existing result. See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists and alanine scanning.
+`--sample-id` is optional. A unique name is generated automatically; add `--sample-id my_sample` to choose your own. See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists and alanine scanning.
 
 ## Output
 
 Reference output for the two M1A examples:
 
 ```text
-S1664_C_61_AlaScan_001 M1A PremPDI2: 0.329 Destabilizing [completed]
-S1150_C_81_AlaScan_001 M1A PremPRI2: -0.541 Stabilizing [completed]
+<sample_id> M1A PremPDI2: 0.329 Destabilizing [completed]
+<sample_id> M1A PremPRI2: -0.541 Stabilizing [completed]
 ```
 
 The reference ΔΔG values are **0.329 kcal/mol** for DNA and **-0.541 kcal/mol** for RNA. Negative values indicate stabilizing mutations; positive values indicate destabilizing mutations.
@@ -60,12 +58,12 @@ The reference ΔΔG values are **0.329 kcal/mol** for DNA and **-0.541 kcal/mol*
 Results are saved automatically:
 
 ```text
-output/protein_dna/S1664_C_61_AlaScan_001/prediction/
+output/protein_dna/<sample_id>/prediction/
 ├── prempni_prediction.csv
 └── prempni_prediction.json
 ```
 
-RNA results use `output/protein_rna/S1150_C_81_AlaScan_001/prediction/`.
+RNA results use `output/protein_rna/<sample_id>/prediction/`. The automatically generated name is printed when the run starts.
 
 ## Datasets
 
