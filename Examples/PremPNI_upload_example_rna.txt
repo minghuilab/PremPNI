@@ -1,0 +1,6 @@
+#Residue	Mutant Residue
+#split by tab
+# For the RNA Load example protein.
+M1	A
+P4	A
+R7	A

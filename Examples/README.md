@@ -1,22 +1,25 @@
 # Usage and input formats
 
-Run commands from the repository root. The launcher saves results in `output/` and mounts the local `input/` directory as `/input/` when present.
+Run commands from the repository root. The launcher mounts this repository's `Examples/` as `/examples/` (read-only), saves results in `output/`, and mounts a local `input/` directory as `/input/` when present.
 
 ## Examples
 
 | File | Purpose |
 | --- | --- |
-| [prempni_dna_example.json](prempni_dna_example.json) | 2KO0, A39T; 87 aa and two 16 nt DNA chains |
-| [prempni_rna_example.json](prempni_rna_example.json) | 1AUD, K49A; 101 aa and one 30 nt RNA chain |
-| [PremPNI_complexes_example.tsv](PremPNI_complexes_example.tsv) | One DNA and one RNA complex |
+| [prempni_dna_example.json](prempni_dna_example.json) | S1664_C_61_AlaScan_001, M1A; 272 aa and two 14 nt DNA chains |
+| [prempni_rna_example.json](prempni_rna_example.json) | S1150_C_81_AlaScan_001, M1A; 282 aa and one 29 nt RNA chain |
+| [PremPNI_complexes_example.tsv](PremPNI_complexes_example.tsv) | One DNA and one RNA complex, three independent mutations each |
+| [PremPNI_upload_example_dna.txt](PremPNI_upload_example_dna.txt) | DNA mutation list: M1A, F3A, Y6A |
+| [PremPNI_upload_example_rna.txt](PremPNI_upload_example_rna.txt) | RNA mutation list: M1A, P4A, R7A |
 | [run_dna.sh](run_dna.sh), [run_rna.sh](run_rna.sh) | Runnable Docker commands |
 
 ```bash
 bash Examples/run_dna.sh
 bash Examples/run_rna.sh
 
-bash Examples/prempni.sh --input-json /opt/prempni/examples/prempni_dna_example.json
-bash Examples/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+bash Examples/prempni.sh --input-json /examples/prempni_dna_example.json
+bash Examples/prempni.sh --input-json /examples/prempni_rna_example.json
+bash Examples/prempni.sh --input-tsv /examples/PremPNI_complexes_example.tsv
 ```
 
 ## Custom inputs
@@ -31,32 +34,29 @@ bash Examples/prempni.sh --input-tsv /input/complexes.tsv
 
 Protein sequences use the 20 standard amino acids; DNA uses A/C/G/T and RNA uses A/C/G/U. Supply nucleic-acid chains in the 5′→3′ direction. Mutation positions start at 1 in the supplied wild-type protein sequence; PDB/literature numbering may require mapping.
 
-Example input notation (`A2V`: alanine at position 2 replaced by valine):
-
-```text
-Protein sequence: MAGKRVLSDYEKLQNFDPATVREAIKQLGVEKDSNVRFYTPEEIRKALDAGADVVVT
-Mutation:         A2V
-DNA sequence:     ACGTACGT
-```
+`M1A` replaces methionine at sequence position 1 with alanine.
 
 The website TSV has five columns: sample_id, complex_type, protein_sequence, nucleic_acid_sequences and mutations. `|` separates nucleic-acid chains and independent mutations. The full TSV is validated before computation; sample IDs and mutations within each complex must be unique. Empty chain/mutation entries are rejected.
 
 ## Mutation lists and scanning
 
-In the [DNA command](run_dna.sh), replace `--mutation A39T` with one of:
+In the [DNA command](run_dna.sh), replace `--mutation M1A` with one of:
 
-- `--mutations 'A39T|A39V'`: independent mutations in input order.
-- `--mutation-file /input/mutations.txt`: TXT/CSV/TSV mutation list; comments beginning with `#` and mutation headers are supported.
+- `--mutations 'M1A|F3A|Y6A'`: independent mutations in input order.
+- `--mutation-file /examples/PremPNI_upload_example_dna.txt`: TXT/CSV/TSV mutation list; comments beginning with `#` and mutation headers are supported.
 - `--alanine-scan`: one XnA row per protein position. Existing alanines return `0.000`, Destabilizing, `computed=false`, without model computation.
+
+For RNA, use `M1A|P4A|R7A` or `/examples/PremPNI_upload_example_rna.txt`.
 
 ## Output
 
 ```text
-2KO0 A39T PremPDI2: 0.549 Destabilizing [completed]
+S1664_C_61_AlaScan_001 M1A PremPDI2: 0.329 Destabilizing [completed]
+S1150_C_81_AlaScan_001 M1A PremPRI2: -0.541 Stabilizing [completed]
 ```
 
 ΔΔG is reported in kcal/mol. Results include `prempni_prediction.csv`, `prempni_prediction.json` and `job.json`:
 
-- DNA example: `output/protein_dna/2KO0/prediction/`
-- RNA example: `output/protein_rna/1AUD/prediction/`
+- DNA example: `output/protein_dna/S1664_C_61_AlaScan_001/prediction/`
+- RNA example: `output/protein_rna/S1150_C_81_AlaScan_001/prediction/`
 - Multiple complexes: `output/collections/JOB_ID/`

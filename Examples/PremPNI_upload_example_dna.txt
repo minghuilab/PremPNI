@@ -1,0 +1,6 @@
+#Residue	Mutant Residue
+#split by tab
+# For the DNA Load example protein.
+M1	A
+F3	A
+Y6	A
