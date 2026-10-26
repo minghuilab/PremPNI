@@ -42,7 +42,7 @@ bash Examples/prempni.sh \
 
 For your own data, replace the wild-type protein sequence, mutation and nucleic-acid sequences. `M1A` replaces methionine at position 1 with alanine; positions start at 1 in the supplied protein sequence. Use one `--chain NAME=SEQUENCE` per nucleic-acid chain, written in the 5′→3′ direction (T for DNA, U for RNA).
 
-`--sample-id` is optional. A unique name is generated automatically; add `--sample-id my_sample` to choose your own. See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists and alanine scanning.
+See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists and alanine scanning.
 
 ## Output
 
