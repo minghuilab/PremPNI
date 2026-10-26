@@ -1,6 +1,6 @@
 # PremPNI
 
-PremPNI predicts binding ΔΔG (kcal/mol) for single-site protein mutations: **PremPDI2** for DNA and **PremPRI2** for RNA. Inputs are protein and nucleic acid sequences plus mutations; no 3D structure is required. Mutations are evaluated independently.
+**PremPNI** predicts changes in protein–nucleic acid binding affinity caused by single amino acid substitutions. PremPDI2 is used for protein–DNA interactions and PremPRI2 for protein–RNA interactions. Only the wild-type protein sequence, the binding DNA or RNA sequences, and the substitution to be tested are required; no three-dimensional structure is needed.
 
 [Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](#install) · [Usage and input formats](Examples/README.md)
 
