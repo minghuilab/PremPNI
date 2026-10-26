@@ -12,11 +12,11 @@ Run commands from the repository root. The launcher saves results in `output/` a
 | [run_dna.sh](run_dna.sh), [run_rna.sh](run_rna.sh) | Runnable Docker commands |
 
 ```bash
-bash examples/run_dna.sh
-bash examples/run_rna.sh
+bash Examples/run_dna.sh
+bash Examples/run_rna.sh
 
-bash examples/prempni.sh --input-json /opt/prempni/examples/prempni_dna_example.json
-bash examples/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+bash Examples/prempni.sh --input-json /opt/prempni/examples/prempni_dna_example.json
+bash Examples/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
 ```
 
 ## Custom inputs
@@ -24,9 +24,9 @@ bash examples/prempni.sh --input-tsv /opt/prempni/examples/PremPNI_complexes_exa
 Adapt an example JSON or TSV, save it in `input/`, then run:
 
 ```bash
-bash examples/prempni.sh --input-json /input/request.json
+bash Examples/prempni.sh --input-json /input/request.json
 # Or:
-bash examples/prempni.sh --input-tsv /input/complexes.tsv
+bash Examples/prempni.sh --input-tsv /input/complexes.tsv
 ```
 
 Protein sequences use the 20 standard amino acids; DNA uses A/C/G/T and RNA uses A/C/G/U. Supply nucleic-acid chains in the 5′→3′ direction. Mutation positions start at 1 in the supplied wild-type protein sequence; PDB/literature numbering may require mapping.

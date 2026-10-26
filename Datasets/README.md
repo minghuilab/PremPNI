@@ -13,4 +13,4 @@ Download the four datasets as Excel workbooks. Each workbook contains a `README`
 
 S1336 and S599 include PremPDI2/PremPRI2 predictions averaged over three forward-trained MLPs. Their separate structure-model predictions use leave-one-complex-out cross-validation (LOCOV), with CatBoost for DNA and ExtraTrees for RNA.
 
-Mutation positions in S1336/S599 may require mapping to the supplied sequence. These research datasets differ from the [CLI input examples](../examples/README.md).
+Mutation positions in S1336/S599 may require mapping to the supplied sequence. These research datasets differ from the [CLI input examples](../Examples/README.md).
