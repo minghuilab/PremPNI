@@ -55,8 +55,8 @@ For RNA, use `M1A|P4A|R7A` or `/examples/PremPNI_upload_example_rna.txt`.
 ## Output
 
 ```text
-<sample_id> M1A PremPDI2: 0.329 Destabilizing [completed]
-<sample_id> M1A PremPRI2: -0.541 Stabilizing [completed]
+<sample_id> M1A PremPDI2: 0.329 Destabilizing
+<sample_id> M1A PremPRI2: -0.541 Stabilizing
 ```
 
 ΔΔG is reported in kcal/mol. Results include `prempni_prediction.csv`, `prempni_prediction.json` and `job.json`:

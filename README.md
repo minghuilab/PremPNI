@@ -49,9 +49,11 @@ See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists an
 Reference output for the two M1A examples:
 
 ```text
-<sample_id> M1A PremPDI2: 0.329 Destabilizing [completed]
-<sample_id> M1A PremPRI2: -0.541 Stabilizing [completed]
+<sample_id> M1A PremPDI2: 0.329 Destabilizing
+<sample_id> M1A PremPRI2: -0.541 Stabilizing
 ```
+
+`sample_id` identifies the input complex and its output folder.
 
 The reference ΔΔG values are **0.329 kcal/mol** for DNA and **-0.541 kcal/mol** for RNA. Negative values indicate stabilizing mutations; positive values indicate destabilizing mutations.
 
