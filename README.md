@@ -1,83 +1,119 @@
 # PremPNI
 
-**PremPNI** predicts changes in protein–nucleic acid binding affinity caused by single amino acid substitutions. PremPDI2 is used for protein–DNA interactions and PremPRI2 for protein–RNA interactions. Only the wild-type protein sequence, the binding DNA or RNA sequences, and the substitution to be tested are required; no three-dimensional structure is needed.
+## About
 
-[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Installation](#installation) · [Usage and input formats](Examples/README.md)
+**PremPNI** predicts changes in protein–nucleic acid binding affinity caused by single amino acid substitutions. **PremPDI2** is used for protein–DNA interactions and **PremPRI2** for protein–RNA interactions. Only the wild-type protein sequence, the binding DNA or RNA sequences, and the substitution to be tested are required; no three-dimensional structure is needed.
 
-## Installation
+[Web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) · [Datasets](Datasets/README.md)
 
-Install [Docker](https://docs.docker.com/get-started/get-docker/), then run:
+## PremPNI Installation and Usage Instructions
+
+### 1. Download the Docker Image
+
+Install [Docker](https://docs.docker.com/get-started/get-docker/), then download PremPNI and its Docker image:
 
 ```bash
 git clone https://github.com/minghuilab/PremPNI.git
 cd PremPNI
 docker pull ghcr.io/minghuilab/prempni
-bash Examples/prempni.sh --help
 ```
 
-## Run a prediction
+The image includes the software and trained models. The download is approximately **14.7 GB**, and the extracted image occupies about **18.9 GB**. We recommend **50 GB of free disk space** for downloading, installation and example results.
 
-Run the following commands from the `PremPNI` directory. Predictions use CPU by default.
+Download time depends on your connection. At 100 Mbps, the transfer alone would take about **20 minutes**; extraction requires additional time.
 
-### Protein–DNA
+### 2. Run the Docker Container
+
+Check that the container can start and display the available options:
 
 ```bash
-bash Examples/prempni.sh \
-  --complex-type dna \
-  --protein-sequence MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK \
-  --mutation M1A \
-  --chain DNA_1=CTCGACCGGTCGAG \
-  --chain DNA_2=CTCGACCGGTCGAG
+docker run --rm ghcr.io/minghuilab/prempni --help
 ```
 
-### Protein–RNA
+The prediction commands below start and stop the container automatically. Run them from the `PremPNI` directory.
+
+### 3. Prepare the Input File
+
+Copy the [DNA example](Examples/prempni_dna_example.json) to an `input/` folder, then edit `input/request.json` for your own data:
 
 ```bash
-bash Examples/prempni.sh \
-  --complex-type rna \
-  --protein-sequence MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK \
-  --mutation M1A \
-  --chain RNA_1=GGCAGAUCUGAGCCUGGGAGCUCUCUGCC
+mkdir -p input
+cp Examples/prempni_dna_example.json input/request.json
 ```
 
-For your own data, replace the wild-type protein sequence, mutation and nucleic-acid sequences. `M1A` replaces methionine at position 1 with alanine; positions start at 1 in the supplied protein sequence. Use one `--chain NAME=SEQUENCE` per nucleic-acid chain, written in the 5′→3′ direction (T for DNA, U for RNA).
+The input file has the following format:
 
-See the [usage guide](Examples/README.md) for JSON/TSV inputs, mutation lists and alanine scanning.
-
-## Output
-
-Reference output for the two M1A examples:
-
-```text
-<sample_id> M1A PremPDI2: 0.329 Destabilizing
-<sample_id> M1A PremPRI2: -0.541 Stabilizing
+```json
+{
+  "sample_id": "S1664_C_61_AlaScan_001",
+  "complex_type": "dna",
+  "protein_sequence": "MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK",
+  "mutation": "M1A",
+  "chains": [
+    {"chain_id": "DNA_1", "sequence": "CTCGACCGGTCGAG"},
+    {"chain_id": "DNA_2", "sequence": "CTCGACCGGTCGAG"}
+  ]
+}
 ```
 
-`sample_id` identifies the input complex and its output folder.
+Use a unique `sample_id` to name the result folder. `M1A` means replacing methionine at position 1 with alanine; positions start at 1 in the supplied wild-type protein sequence.
 
-The reference ΔΔG values are **0.329 kcal/mol** for DNA and **-0.541 kcal/mol** for RNA. Negative values indicate stabilizing mutations; positive values indicate destabilizing mutations.
+Provide one entry per nucleic acid chain, written in the 5′→3′ direction. DNA uses A/C/G/T. For RNA, use `"complex_type": "rna"` and A/C/G/U sequences, as shown in the [RNA example](Examples/prempni_rna_example.json).
 
-Results are saved automatically:
+### 4. Run PremPNI
+
+Run your prepared input file:
+
+```bash
+bash Examples/prempni.sh --input-json /input/request.json
+```
+
+Here, `/input/request.json` refers to the local `input/request.json` file inside Docker.
+
+To run the two supplied examples directly:
+
+```bash
+# Protein–DNA: 272 amino acids
+bash Examples/run_dna.sh
+
+# Protein–RNA: 282 amino acids
+bash Examples/run_rna.sh
+```
+
+In CPU-only tests using 10 CPUs and a 64 GiB memory limit, these single-mutation examples took approximately **22 seconds for DNA** and **62 seconds for RNA**. Runtime varies with sequence length and hardware; these timings exclude downloading the image.
+
+See [additional input formats](Examples/README.md) for multiple complexes, mutation lists and alanine scanning. Mutations are evaluated independently.
+
+### 5. Understand the Output Files
+
+Results are saved in the local `output/` folder:
 
 ```text
 output/protein_dna/<sample_id>/prediction/
 ├── prempni_prediction.csv
-└── prempni_prediction.json
+├── prempni_prediction.json
+└── job.json
 ```
 
-RNA results use `output/protein_rna/<sample_id>/prediction/`. The automatically generated name is printed when the run starts.
+RNA results use `output/protein_rna/<sample_id>/prediction/`. The CSV contains the input and predictions; the JSON files also record the run status. For the supplied example scripts, the generated folder name is printed when the run starts.
 
-## Datasets
+The main result columns and reference values for the two M1A examples are:
 
-| Excel | Interaction | Records | Contents |
+| mutation | predictor | prediction_kcal_per_mol | predicted_effect |
 | --- | --- | ---: | --- |
-| [S1664](Datasets/S1664.xlsx) | Protein–DNA | 1,664 | Training sequences and experimental ΔΔG |
-| [S1150](Datasets/S1150.xlsx) | Protein–RNA | 1,150 | Training sequences and experimental ΔΔG |
-| [S1336](Datasets/S1336.xlsx) | Protein–DNA | 1,336 | Experimental ΔΔG and model predictions |
-| [S599](Datasets/S599.xlsx) | Protein–RNA | 599 | Experimental ΔΔG and model predictions |
+| M1A | PremPDI2 | 0.329 | Destabilizing |
+| M1A | PremPRI2 | -0.541 | Stabilizing |
 
-See the [data guide](Datasets/README.md) for contents.
+`prediction_kcal_per_mol` is the predicted binding affinity change (ΔΔG, kcal/mol). Negative values indicate stabilizing substitutions; zero and positive values are classified as destabilizing.
 
-## License
+### 6. Recommended System
+
+We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker and Bash installed. A GPU is not required.
+
+| Resource | Recommendation |
+| --- | --- |
+| CPU | 10 CPU cores for runtimes similar to the example tests |
+| Memory | 64 GB or more; longer sequences may require more memory |
+| Free disk space | 50 GB or more for installation and example results |
 
 Academic, non-commercial use only. [License](Examples/licenses/LICENSE) · [Third-party notices](Examples/licenses/THIRD_PARTY_NOTICES.md).

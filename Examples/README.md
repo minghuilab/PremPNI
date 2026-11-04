@@ -1,5 +1,7 @@
 # Usage and input formats
 
+For setup and a complete input example, see the [installation and usage instructions](../README.md#prempni-installation-and-usage-instructions).
+
 Run commands from the repository root. The launcher mounts this repository's `Examples/` as `/examples/` (read-only), saves results in `output/`, and mounts a local `input/` directory as `/input/` when present.
 
 ## Examples
