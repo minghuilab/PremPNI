@@ -1,6 +1,6 @@
 # PremPNI datasets
 
-The four datasets are provided as Excel files. See each workbook's `README` sheet for details.
+See each workbook's `README` sheet for details.
 
 | Dataset | Interaction | Records | Main Contents |
 | --- | --- | ---: | --- |
