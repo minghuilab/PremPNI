@@ -1,14 +1,12 @@
 # PremPNI datasets
 
-Click a dataset to download its Excel file. See each workbook's `README` sheet for details.
+The four datasets are provided as Excel files. See each workbook's `README` sheet for details.
 
-| Dataset | Interaction | Records | Contents |
+| Dataset | Interaction | Records | Main Contents |
 | --- | --- | ---: | --- |
-| [S1336](S1336.xlsx) | Protein–DNA | 1,336 | Experimental ΔΔG and predictions |
-| [S599](S599.xlsx) | Protein–RNA | 599 | Experimental ΔΔG and predictions |
-| [S1664](S1664.xlsx) | Protein–DNA | 1,664 | Sequences and experimental ΔΔG |
-| [S1150](S1150.xlsx) | Protein–RNA | 1,150 | Sequences and experimental ΔΔG |
+| S1336 | Protein–DNA | 1,336 | PDB and Chain IDs, Mutations, Experimental ΔΔG, CatBoost and PremPDI2 Predictions |
+| S599 | Protein–RNA | 599 | PDB and Chain IDs, Mutations, Experimental ΔΔG, ExtraTrees and PremPRI2 Predictions |
+| S1664 | Protein–DNA | 1,664 | Mutations, Wild-Type Protein Sequences, DNA Sequences and Experimental ΔΔG |
+| S1150 | Protein–RNA | 1,150 | Mutations, Wild-Type Protein Sequences, RNA Sequences and Experimental ΔΔG |
 
-- **Unit:** kcal/mol.
-- **Effect:** negative ΔΔG = Stabilizing; zero or positive ΔΔG = Destabilizing.
-- **Numbering:** for S1336/S599, match mutation numbers to the supplied protein sequence before use.
+All ΔΔG values are in kcal/mol.
