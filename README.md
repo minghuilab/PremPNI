@@ -50,24 +50,16 @@ Use the same format for your own data. To test several substitutions, put each o
 
 ### 3. Start the Docker Container
 
-Run these commands on your computer. Create separate folders for your input files and prediction results:
-
-```bash
-mkdir -p input
-mkdir -p output
-```
-
-For your own data, place the Tab-separated file at `input/input.tsv`. Then open the PremPNI environment:
+The image includes `/data/input/` and `/data/output/`. Run this command from the folder where you want to keep your input files and results. PremPNI creates `input/` and `output/` there automatically when the container starts.
 
 ```bash
 docker run -it --rm \
-  -v "$PWD/input:/input:ro" \
-  -v "$PWD/output:/output" \
-  --entrypoint bash \
-  ghcr.io/minghuilab/prempni
+  --user "$(id -u):$(id -g)" \
+  -v "$PWD:/data" \
+  ghcr.io/minghuilab/prempni bash
 ```
 
-This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/input/` and `/output/`. No environment activation is required. `--rm` removes the container after you exit; the image and results saved in your local `output/` folder are retained.
+This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/data/input/` and `/data/output/`. The `--user` option keeps new files owned by your current user. No environment activation is required. After startup, you can place your own file at `input/input.tsv` using your computer's file manager or another terminal. Existing files are preserved. `--rm` removes the container after you exit; the image and results in your local `output/` folder are retained.
 
 ### 4. Run PremPNI
 
@@ -78,7 +70,7 @@ Run the following Python commands **inside the container**. `run_prempni.py` is 
 ```bash
 python run_prempni.py \
   --input /opt/prempni/examples/prempni_dna_example.tsv \
-  --output /output
+  --output /data/output
 ```
 
 **Protein-RNA example**
@@ -86,15 +78,15 @@ python run_prempni.py \
 ```bash
 python run_prempni.py \
   --input /opt/prempni/examples/prempni_rna_example.tsv \
-  --output /output
+  --output /data/output
 ```
 
 **Your own input**
 
 ```bash
 python run_prempni.py \
-  --input /input/input.tsv \
-  --output /output
+  --input /data/input/input.tsv \
+  --output /data/output
 ```
 
 Each input row is predicted independently. All rows are validated before prediction starts. Results are saved in the local `output/` folder on your computer. You can run more predictions in the same container. When finished, type `exit` to return to your computer's terminal.
