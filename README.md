@@ -95,14 +95,6 @@ python run_prempni.py \
   --output /data/output
 ```
 
-**Your own input**
-
-```bash
-python run_prempni.py \
-  --input /data/input/input.tsv \
-  --output /data/output
-```
-
 **Choose a different input filename or result subfolder**
 
 ```bash
@@ -119,10 +111,10 @@ Reference CPU runtimes for one mutation are approximately **22 seconds for DNA**
 
 ### 5. Understand the Output Files
 
-Each run creates a `collections/<JOB_ID>/` subfolder in the directory selected with `--output`. With the default folders, the main result file is:
+Each run automatically creates a `<JOB_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. With the default folders, the result file is:
 
 ```text
-output/collections/<JOB_ID>/prempni_prediction.tsv
+output/<JOB_ID>/prempni_prediction.tsv
 ```
 
 The output is **Tab-separated**. It keeps the original five input columns and adds two result columns:
@@ -138,7 +130,7 @@ Reference values for the [complete example output](Examples/PremPNI_prediction_e
 | DNA_example | 0.329 | Destabilizing |
 | RNA_example | -0.541 | Stabilizing |
 
-**Stabilizing:** ΔΔG < 0. **Destabilizing:** ΔΔG ≥ 0. Predicted effect is assigned before rounding. Failed predictions retain their input row with the two result cells empty; details are recorded in `job.json`.
+**Stabilizing:** ΔΔG < 0. **Destabilizing:** ΔΔG ≥ 0.
 
 ### 6. Recommended System
 
