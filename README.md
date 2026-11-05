@@ -25,16 +25,15 @@ docker pull ghcr.io/minghuilab/prempni
 
 ### 2. Start the Docker Container
 
-The image includes `/data/input/` and `/data/output/`. Run this command from the folder where you want to keep your input files and results. PremPNI creates `input/` and `output/` there automatically when the container starts.
+Run this command in a terminal on your computer:
 
 ```bash
-docker run -it --rm \
-  --user "$(id -u):$(id -g)" \
-  -v "$PWD:/data" \
-  ghcr.io/minghuilab/prempni bash
+docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/data/input/` and `/data/output/`. The `--user` option keeps new files owned by your current user. No environment activation is required. After startup, you can place your own file at `input/input.tsv` using your computer's file manager or another terminal. Existing files are preserved. `--rm` removes the container after you exit; the image and results in your local `output/` folder are retained.
+This opens a terminal inside the container at `/opt/prempni/`, with the environment ready to use. The input and output folders are `/data/input/` and `/data/output/` inside the container. Type `exit` to leave it; the container and its files are retained.
+
+On your computer, use `docker ps -a` to find the container name and `docker start -ai <CONTAINER_NAME>` to return to it.
 
 ### 3. Prepare Input Files
 
@@ -60,6 +59,8 @@ The example files are:
 
 Use the same format for your own data. To test several substitutions, put each one on a separate row. Do not combine substitutions within a cell. Input order is preserved.
 
+To copy your input file into the container, run `docker cp input.tsv <CONTAINER_NAME>:/data/input/input.tsv` in another terminal on your computer.
+
 ### 4. Run PremPNI
 
 Run the following Python commands **inside the container**. `run_prempni.py` is the entry point for both single-row and multi-row input files. `--input` specifies the input file, and `--output` specifies the results directory.
@@ -84,11 +85,13 @@ python run_prempni.py \
 
 A Run ID identifies one prediction run. It is generated automatically from `PNI`, the UTC start time (`YYYYMMDD-HHMMSS`), and five random uppercase letters, e.g. `PNI-20261105-051102-MXGMG` (illustrative; each run receives a new ID).
 
-Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. With the default folders, the result file is:
+Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. The result file is saved inside the container at:
 
 ```text
-output/<RUN_ID>/prempni_prediction.tsv
+/data/output/<RUN_ID>/prempni_prediction.tsv
 ```
+
+To copy the results to your computer, run `docker cp <CONTAINER_NAME>:/data/output .` in your computer's terminal. This copies the `output/` folder into your current folder.
 
 The output is **Tab-separated**. It keeps the original four input columns and adds two result columns. The example output is shown below; scroll horizontally to view all six columns and the complete sequences.
 
