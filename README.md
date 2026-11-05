@@ -31,9 +31,7 @@ Run this command in a terminal on your computer:
 docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-After running this command, you can run PremPNI from `/opt/prempni/` inside the container. No environment activation is needed.
-
-The container includes `/data/input/` for input files and `/data/output/` for prediction results. Type `exit` to leave the container; the container and its files are retained.
+The container includes `/data/input/` for input files and `/data/output/` for prediction results.
 
 ### 3. Preparing Input Files
 
