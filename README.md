@@ -50,17 +50,6 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 - **Nucleic acid sequence:** use `&` between chains; write each chain in the 5′→3′ direction (T for DNA, U for RNA).
 - **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
 
-The example files are:
-
-| File | Contents |
-| --- | --- |
-| [prempni_dna_example.tsv](Examples/prempni_dna_example.tsv) | Protein-DNA M1A; 272 amino acids and two 14 nt DNA chains |
-| [prempni_rna_example.tsv](Examples/prempni_rna_example.tsv) | Protein-RNA M1A; 282 amino acids and one 29 nt RNA chain |
-
-Use the same format for your own data. To test several substitutions, put each one on a separate row. Do not combine substitutions within a cell. Input order is preserved.
-
-To copy your input file into the container, run `docker cp input.tsv <CONTAINER_NAME>:/data/input/input.tsv` in another terminal on your computer.
-
 ### 4. Running PremPNI
 
 Run the following Python commands **inside the container**. `run_prempni.py` is the entry point for both single-row and multi-row input files. `--input` specifies the input file, and `--output` specifies the results directory.
