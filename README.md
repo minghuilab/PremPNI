@@ -95,8 +95,6 @@ python run_prempni.py \
   --output /data/output
 ```
 
-Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
-
 ### 5. Understand the Output Files
 
 Each run automatically creates a `<JOB_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. With the default folders, the result file is:
