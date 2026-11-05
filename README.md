@@ -48,56 +48,60 @@ The example files are:
 
 Use the same format for your own data. To test several substitutions, put each one on a separate row with a unique Job name. Do not combine substitutions within a cell. Input order is preserved.
 
-### 3. Run PremPNI
+### 3. Start the Docker Container
 
-**Run the included examples**
-
-Create a folder for the results, then run either example inside the image:
-
-```bash
-mkdir -p output
-# DNA example
-docker run --rm \
-  -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni \
-  --input-tsv /opt/prempni/examples/prempni_dna_example.tsv
-```
-
-```bash
-mkdir -p output
-# RNA example
-docker run --rm \
-  -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni \
-  --input-tsv /opt/prempni/examples/prempni_rna_example.tsv
-```
-
-Results are saved in your local `output/` folder. No environment activation is required.
-
-**Use your own input**
-
-Create two folders at the same level:
+Run these commands on your computer. Create separate folders for your input files and prediction results:
 
 ```bash
 mkdir -p input
 mkdir -p output
 ```
 
-Place your own Tab-separated file at `input/input.tsv`, then run:
+For your own data, place the Tab-separated file at `input/input.tsv`. Then open the PremPNI environment:
 
 ```bash
-docker run --rm \
+docker run -it --rm \
   -v "$PWD/input:/input:ro" \
   -v "$PWD/output:/output" \
-  ghcr.io/minghuilab/prempni \
-  --input-tsv /input/input.tsv
+  --entrypoint bash \
+  ghcr.io/minghuilab/prempni
 ```
 
-`input/` holds your own input file; `output/` holds the prediction results. Each input row is predicted independently. All rows are validated before prediction starts.
+This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/input/` and `/output/`. No environment activation is required. `--rm` removes the container after you exit; the image and results saved in your local `output/` folder are retained.
+
+### 4. Run PremPNI
+
+Run the following Python commands **inside the container**. `--input` specifies the input file, and `--output` specifies the results directory.
+
+**Protein-DNA example**
+
+```bash
+python run_prempni.py \
+  --input /opt/prempni/examples/prempni_dna_example.tsv \
+  --output /output
+```
+
+**Protein-RNA example**
+
+```bash
+python run_prempni.py \
+  --input /opt/prempni/examples/prempni_rna_example.tsv \
+  --output /output
+```
+
+**Your own input**
+
+```bash
+python run_prempni.py \
+  --input /input/input.tsv \
+  --output /output
+```
+
+Each input row is predicted independently. All rows are validated before prediction starts. Results are saved in the local `output/` folder on your computer. You can run more predictions in the same container. When finished, type `exit` to return to your computer's terminal.
 
 Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
-### 4. Understand the Output Files
+### 5. Understand the Output Files
 
 The main result file is saved under a folder created for each run:
 
@@ -120,7 +124,7 @@ Reference values for the [complete example output](Examples/PremPNI_prediction_e
 
 **Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding. Failed predictions retain their input row with the two result cells empty; details are recorded in `job.json`.
 
-### 5. Recommended System
+### 6. Recommended System
 
 We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker installed. A GPU is not required.
 
