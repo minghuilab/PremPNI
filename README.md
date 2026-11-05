@@ -105,18 +105,12 @@ Each run automatically creates a `<JOB_ID>/` subfolder in the directory selected
 output/<JOB_ID>/prempni_prediction.tsv
 ```
 
-The output is **Tab-separated**. It keeps the original five input columns and adds two result columns:
+The output is **Tab-separated**. It keeps the original five input columns and adds two result columns. The [example output](Examples/PremPNI_prediction_example.tsv) is shown below; scroll horizontally to view all columns and the complete sequences.
 
-```text
-Job name	Type	Wild-type protein sequence	Nucleic acid sequence	Mutation	Predicted ΔΔG (kcal/mol)	Predicted effect
-```
-
-Reference values for the [complete example output](Examples/PremPNI_prediction_example.tsv):
-
-| Job name | Predicted ΔΔG (kcal/mol) | Predicted effect |
-| --- | ---: | --- |
-| DNA_example | 0.329 | Destabilizing |
-| RNA_example | -0.541 | Stabilizing |
+| Job name | Type | Wild-type protein sequence | Nucleic acid sequence | Mutation | Predicted ΔΔG (kcal/mol) | Predicted effect |
+| --- | --- | --- | --- | --- | --- | --- |
+| DNA_example | Protein-DNA | `MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK` | `CTCGACCGGTCGAG&CTCGACCGGTCGAG` | M1A | 0.329 | Destabilizing |
+| RNA_example | Protein-RNA | `MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK` | `GGCAGAUCUGAGCCUGGGAGCUCUCUGCC` | M1A | -0.541 | Stabilizing |
 
 **Stabilizing:** ΔΔG < 0. **Destabilizing:** ΔΔG ≥ 0.
 
