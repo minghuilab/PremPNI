@@ -17,7 +17,6 @@ docker pull ghcr.io/minghuilab/prempni
 ```
 
 - **Image size:** 18.9 GB (download: 14.7 GB)
-- **Recommended free disk space:** ≥50 GB
 - **Estimated download time (approximate):**
 
 > 100 Mbps: ~20 min<br>
@@ -106,6 +105,5 @@ We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker installed.
 | --- | --- |
 | CPU | 10 CPU cores for runtimes similar to the example tests |
 | Memory | 64 GB or more; longer sequences may require more memory |
-| Free disk space | 50 GB or more for installation and example results |
 
 Academic, non-commercial use only. [License](Examples/licenses/LICENSE) · [Third-party notices](Examples/licenses/THIRD_PARTY_NOTICES.md).
