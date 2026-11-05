@@ -135,10 +135,10 @@ Reference values for the [complete example output](Examples/PremPNI_prediction_e
 
 | Job name | Predicted ΔΔG (kcal/mol) | Predicted effect |
 | --- | ---: | --- |
-| DNA_example | 0.329 | Des |
-| RNA_example | -0.541 | Stab |
+| DNA_example | 0.329 | Destabilizing |
+| RNA_example | -0.541 | Stabilizing |
 
-**Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding. Failed predictions retain their input row with the two result cells empty; details are recorded in `job.json`.
+**Stabilizing:** ΔΔG < 0. **Destabilizing:** ΔΔG ≥ 0. Predicted effect is assigned before rounding. Failed predictions retain their input row with the two result cells empty; details are recorded in `job.json`.
 
 ### 6. Recommended System
 
