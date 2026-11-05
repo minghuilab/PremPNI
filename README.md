@@ -93,4 +93,4 @@ The output is **Tab-separated**. It keeps the original four input columns and ad
 - **CPU:** 10 CPU cores recommended; a GPU is not required.
 - **RAM:** ≥64 GB recommended (longer sequences may require more memory).
 
-Academic, non-commercial use only. [License](Examples/licenses/LICENSE) · [Third-party notices](Examples/licenses/THIRD_PARTY_NOTICES.md).
+Academic, non-commercial use only. [License](licenses/LICENSE) · [Third-party notices](licenses/THIRD_PARTY_NOTICES.md).
