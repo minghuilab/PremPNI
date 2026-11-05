@@ -4,9 +4,9 @@
 
 PremPNI predicts the effects of single amino acid substitutions on protein–**DNA (PremPDI2)** and protein–**RNA (PremPRI2)** binding affinity. For each substitution, PremPNI predicts the change in binding free energy (ΔΔG, kcal/mol), classified as stabilizing (ΔΔG < 0) or destabilizing (ΔΔG ≥ 0). Users only need to provide the wild-type protein and corresponding DNA or RNA sequence(s) and specify the amino acid substitution(s). No 3D structure is required.
 
-## Scoring mutations with PremPS
+## Scoring mutations with PremPNI
 
-We recommend that most users who just want to obtain PremPS predictions use [PremPS website](https://lilab.jysw.suda.edu.cn/research/PremPS/) to obtain scores.
+We recommend that most users who just want to obtain PremPNI predictions use [PremPNI website](https://lilab.jysw.suda.edu.cn/research/PremPNI/) to obtain scores.
 
 ## PremPNI Installation and Usage Instructions
 
