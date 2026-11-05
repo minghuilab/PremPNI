@@ -33,13 +33,20 @@ DNA_example	DNA	MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRK
 RNA_example	RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK	GGCAGAUCUGAGCCUGGGAGCUCUCUGCC	M1A
 ```
 
-- **Job Name:** a unique name for each row; use letters, numbers, underscores, dots or hyphens.
+- **Job Name:** a unique name for each row; start with a letter or number and use letters, numbers, underscores, dots or hyphens.
 - **Type:** `DNA` or `RNA`.
-- **Wild-Type Protein Sequence:** the complete protein sequence before mutation.
+- **Wild-Type Protein Sequence:** the complete protein sequence before mutation, using the 20 standard amino acids.
 - **Nucleic Acid Sequence:** use `&` between chains; write each chain in the 5′→3′ direction (T for DNA, U for RNA).
 - **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
 
-See [input examples](Examples/README.md) for the separate DNA and RNA files. Use the same format for your own data.
+The example files are:
+
+| File | Contents |
+| --- | --- |
+| [prempni_dna_example.tsv](Examples/prempni_dna_example.tsv) | DNA M1A; 272 amino acids and two 14 nt DNA chains |
+| [prempni_rna_example.tsv](Examples/prempni_rna_example.tsv) | RNA M1A; 282 amino acids and one 29 nt RNA chain |
+
+Use the same format for your own data. To test several substitutions, put each one on a separate row with a unique Job Name. Do not combine substitutions within a cell. Input order is preserved.
 
 ### 3. Run PremPNI
 
@@ -57,6 +64,7 @@ docker run --rm \
 ```
 
 ```bash
+mkdir -p output
 # RNA example
 docker run --rm \
   -v "$PWD/output:/output" \
@@ -85,7 +93,7 @@ docker run --rm \
   --input-tsv /input/input.tsv
 ```
 
-`input/` holds your own input file; `output/` holds the prediction results. Each input row is predicted independently.
+`input/` holds your own input file; `output/` holds the prediction results. Each input row is predicted independently. All rows are validated before prediction starts.
 
 Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
@@ -110,7 +118,7 @@ Reference values for the [complete example output](Examples/PremPNI_prediction_e
 | DNA_example | 0.329 | Des |
 | RNA_example | -0.541 | Stab |
 
-**Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding.
+**Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding. Failed predictions retain their input row with the two result cells empty; details are recorded in `job.json`.
 
 ### 5. Recommended System
 
