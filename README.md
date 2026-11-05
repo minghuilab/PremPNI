@@ -31,9 +31,9 @@ Run this command in a terminal on your computer:
 docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-This opens a terminal inside the container at `/opt/prempni/`, with the environment ready to use. The input and output folders are `/data/input/` and `/data/output/` inside the container. Type `exit` to leave it; the container and its files are retained.
+After running this command, you can run PremPNI from `/opt/prempni/` inside the container. No environment activation is needed.
 
-On your computer, use `docker ps -a` to find the container name and `docker start -ai <CONTAINER_NAME>` to return to it.
+The container includes `/data/input/` for input files and `/data/output/` for prediction results. Type `exit` to leave the container; the container and its files are retained.
 
 ### 3. Preparing Input Files
 
