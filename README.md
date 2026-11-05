@@ -71,7 +71,7 @@ This opens a terminal inside the container at `/opt/prempni/`. The local `input/
 
 ### 4. Run PremPNI
 
-Run the following Python commands **inside the container**. `--input` specifies the input file, and `--output` specifies the results directory.
+Run the following Python commands **inside the container**. `run_prempni.py` is the entry point for both single-row and multi-row input files. `--input` specifies the input file, and `--output` specifies the results directory.
 
 **Protein-DNA example**
 
