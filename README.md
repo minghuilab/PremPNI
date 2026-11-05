@@ -10,105 +10,97 @@
 
 ### 1. Download the Docker Image
 
-Install [Docker](https://docs.docker.com/get-started/get-docker/), then download PremPNI and its Docker image:
+Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is installed, then download the image:
 
 ```bash
-git clone https://github.com/minghuilab/PremPNI.git
-cd PremPNI
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-The image includes the software and trained models. The download is approximately **14.7 GB**, and the extracted image occupies about **18.9 GB**. We recommend **50 GB of free disk space** for downloading, installation and example results.
+- **Image size:** 18.9 GB (download: 14.7 GB)
+- **Recommended free disk space:** ≥50 GB
+- **Estimated download time (approximate):**
 
-Download time depends on your connection. At 100 Mbps, the transfer alone would take about **20 minutes**; extraction requires additional time.
+> 100 Mbps: ~20 min<br>
+> 1 Gbps: ~2 min<br>
+> (actual time depends on your network speed)
 
 ### 2. Run the Docker Container
 
-Check that the container can start and display the available options:
+Check that the container can start:
 
 ```bash
 docker run --rm ghcr.io/minghuilab/prempni --help
 ```
 
-The prediction commands below start and stop the container automatically. Run them from the `PremPNI` directory.
+The image includes the program and trained models. Each command starts and stops the container automatically.
 
 ### 3. Prepare the Input File
 
-Copy the [DNA example](Examples/prempni_dna_example.json) to an `input/` folder, then edit `input/request.json` for your own data:
+Create a working folder:
 
 ```bash
-mkdir -p input
-cp Examples/prempni_dna_example.json input/request.json
+mkdir -p prempni/input prempni/output
+cd prempni
 ```
 
-The input file has the following format:
+Save the [example file](Examples/PremPNI_complexes_example.tsv) as `input/input.tsv`, then edit it for your own data. Use **Tab** to separate these five columns:
 
-```json
-{
-  "sample_id": "S1664_C_61_AlaScan_001",
-  "complex_type": "dna",
-  "protein_sequence": "MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK",
-  "mutation": "M1A",
-  "chains": [
-    {"chain_id": "DNA_1", "sequence": "CTCGACCGGTCGAG"},
-    {"chain_id": "DNA_2", "sequence": "CTCGACCGGTCGAG"}
-  ]
-}
+```text
+Job Name	Type	Wild-Type Protein Sequence	Nucleic Acid Sequence	Mutation
+DNA_example	DNA	MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK	CTCGACCGGTCGAG&CTCGACCGGTCGAG	M1A
+RNA_example	RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK	GGCAGAUCUGAGCCUGGGAGCUCUCUGCC	M1A
 ```
 
-Use a unique `sample_id` to name the result folder. `M1A` means replacing methionine at position 1 with alanine; positions start at 1 in the supplied wild-type protein sequence.
+- **Job Name:** a unique name for each row; use letters, numbers, underscores, dots or hyphens.
+- **Type:** `DNA` or `RNA`.
+- **Wild-Type Protein Sequence:** the complete protein sequence before mutation.
+- **Nucleic Acid Sequence:** use `&` between chains; write each chain in the 5′→3′ direction (T for DNA, U for RNA).
+- **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
 
-Provide one entry per nucleic acid chain, written in the 5′→3′ direction. DNA uses A/C/G/T. For RNA, use `"complex_type": "rna"` and A/C/G/U sequences, as shown in the [RNA example](Examples/prempni_rna_example.json).
+See [more input examples](Examples/README.md) for separate DNA and RNA files.
 
 ### 4. Run PremPNI
 
-Run your prepared input file:
+Run this command from your `prempni` working folder:
 
 ```bash
-bash Examples/prempni.sh --input-json /input/request.json
+docker run --rm \
+  -v "$PWD/input:/input:ro" \
+  -v "$PWD/output:/output" \
+  ghcr.io/minghuilab/prempni \
+  --input-tsv /input/input.tsv
 ```
 
-Here, `/input/request.json` refers to the local `input/request.json` file inside Docker.
+Docker reads your local `input/input.tsv` and saves results in your local `output/` folder. Each row is predicted independently.
 
-To run the two supplied examples directly:
-
-```bash
-# Protein–DNA: 272 amino acids
-bash Examples/run_dna.sh
-
-# Protein–RNA: 282 amino acids
-bash Examples/run_rna.sh
-```
-
-In CPU-only tests using 10 CPUs and a 64 GiB memory limit, these single-mutation examples took approximately **22 seconds for DNA** and **62 seconds for RNA**. Runtime varies with sequence length and hardware; these timings exclude downloading the image.
-
-See [additional input formats](Examples/README.md) for multiple complexes, mutation lists and alanine scanning. Mutations are evaluated independently.
+Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
 ### 5. Understand the Output Files
 
-Results are saved in the local `output/` folder:
+The main result file is saved under a folder created for each run:
 
 ```text
-output/protein_dna/<sample_id>/prediction/
-├── prempni_prediction.csv
-├── prempni_prediction.json
-└── job.json
+output/collections/<JOB_ID>/prempni_prediction.tsv
 ```
 
-RNA results use `output/protein_rna/<sample_id>/prediction/`. The CSV contains the input and predictions; the JSON files also record the run status. For the supplied example scripts, the generated folder name is printed when the run starts.
+The output is **Tab-separated**. It keeps the original five input columns and adds two result columns:
 
-The main result columns and reference values for the two M1A examples are:
+```text
+Job Name	Type	Wild-Type Protein Sequence	Nucleic Acid Sequence	Mutation	Predicted ΔΔG (kcal/mol)	Predicted effect
+```
 
-| mutation | predictor | prediction_kcal_per_mol | predicted_effect |
-| --- | --- | ---: | --- |
-| M1A | PremPDI2 | 0.329 | Destabilizing |
-| M1A | PremPRI2 | -0.541 | Stabilizing |
+Reference values for the [complete example output](Examples/PremPNI_prediction_example.tsv):
 
-`prediction_kcal_per_mol` is the predicted binding affinity change (ΔΔG, kcal/mol). Negative values indicate stabilizing substitutions; zero and positive values are classified as destabilizing.
+| Job Name | Predicted ΔΔG (kcal/mol) | Predicted effect |
+| --- | ---: | --- |
+| DNA_example | 0.329 | Des |
+| RNA_example | -0.541 | Stab |
+
+**Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding.
 
 ### 6. Recommended System
 
-We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker and Bash installed. A GPU is not required.
+We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker installed. A GPU is not required.
 
 | Resource | Recommendation |
 | --- | --- |

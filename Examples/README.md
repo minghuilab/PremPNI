@@ -1,69 +1,57 @@
-# Usage and input formats
+# Input File Format
 
-For setup and a complete input example, see the [installation and usage instructions](../README.md#prempni-installation-and-usage-instructions).
+For Docker setup and the prediction command, see the [installation and usage instructions](../README.md#prempni-installation-and-usage-instructions).
 
-Run commands from the repository root. The launcher mounts this repository's `Examples/` as `/examples/` (read-only), saves results in `output/`, and mounts a local `input/` directory as `/input/` when present.
+## Example Files
 
-## Examples
+Save an example as `input/input.tsv` in your local `prempni` working folder.
 
-| File | Purpose |
+| File | Contents |
 | --- | --- |
-| [prempni_dna_example.json](prempni_dna_example.json) | DNA M1A; 272 aa and two 14 nt DNA chains |
-| [prempni_rna_example.json](prempni_rna_example.json) | RNA M1A; 282 aa and one 29 nt RNA chain |
-| [PremPNI_complexes_example.tsv](PremPNI_complexes_example.tsv) | One DNA and one RNA complex, three independent mutations each |
-| [PremPNI_upload_example_dna.txt](PremPNI_upload_example_dna.txt) | DNA mutation list: M1A, F3A, Y6A |
-| [PremPNI_upload_example_rna.txt](PremPNI_upload_example_rna.txt) | RNA mutation list: M1A, P4A, R7A |
-| [run_dna.sh](run_dna.sh), [run_rna.sh](run_rna.sh) | Runnable Docker commands |
+| [PremPNI_complexes_example.tsv](PremPNI_complexes_example.tsv) | One DNA and one RNA prediction |
+| [prempni_dna_example.tsv](prempni_dna_example.tsv) | DNA M1A; 272 amino acids and two 14 nt DNA chains |
+| [prempni_rna_example.tsv](prempni_rna_example.tsv) | RNA M1A; 282 amino acids and one 29 nt RNA chain |
+| [PremPNI_prediction_example.tsv](PremPNI_prediction_example.tsv) | Reference output for the combined DNA/RNA example |
 
-```bash
-bash Examples/run_dna.sh
-bash Examples/run_rna.sh
+## Five-Column Format
 
-bash Examples/prempni.sh --input-json /examples/prempni_dna_example.json
-bash Examples/prempni.sh --input-json /examples/prempni_rna_example.json
-bash Examples/prempni.sh --input-tsv /examples/PremPNI_complexes_example.tsv
+The first line contains the column names. Separate columns with a **Tab**, and use `&` between nucleic acid chains.
+
+```text
+Job Name	Type	Wild-Type Protein Sequence	Nucleic Acid Sequence	Mutation
+DNA_example	DNA	MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK	CTCGACCGGTCGAG&CTCGACCGGTCGAG	M1A
+RNA_example	RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK	GGCAGAUCUGAGCCUGGGAGCUCUCUGCC	M1A
 ```
 
-## Custom inputs
+| Column | Description |
+| --- | --- |
+| Job Name | Unique row name; start with a letter or number and use letters, numbers, dots, underscores or hyphens |
+| Type | DNA or RNA |
+| Wild-Type Protein Sequence | Complete wild-type protein sequence using the 20 standard amino acids |
+| Nucleic Acid Sequence | DNA: A/C/G/T; RNA: A/C/G/U; write each chain in the 5′→3′ direction |
+| Mutation | One substitution, such as M1A; numbering starts at 1 in the supplied protein sequence |
 
-Adapt an example JSON or TSV, save it in `input/`, then run:
+To test several substitutions, put each one on a separate row and give each row a different Job Name. Do not combine substitutions within a cell. Input order is preserved.
+
+## Run the File
 
 ```bash
-bash Examples/prempni.sh --input-json /input/request.json
-# Or:
-bash Examples/prempni.sh --input-tsv /input/complexes.tsv
+docker run --rm \
+  -v "$PWD/input:/input:ro" \
+  -v "$PWD/output:/output" \
+  ghcr.io/minghuilab/prempni \
+  --input-tsv /input/input.tsv
 ```
 
-Protein sequences use the 20 standard amino acids; DNA uses A/C/G/T and RNA uses A/C/G/U. Supply nucleic-acid chains in the 5′→3′ direction. Mutation positions start at 1 in the supplied wild-type protein sequence; PDB/literature numbering may require mapping.
-
-`M1A` replaces methionine at sequence position 1 with alanine.
-
-For command-line input, `--sample-id` is optional and defaults to a unique generated name. Add `--sample-id my_sample` to choose a name. Reusing an explicit name requires `--overwrite` to replace its results.
-
-The website TSV has five columns: sample_id, complex_type, protein_sequence, nucleic_acid_sequences and mutations. `|` separates nucleic-acid chains and independent mutations. The full TSV is validated before computation; sample IDs and mutations within each complex must be unique. Empty chain/mutation entries are rejected.
-
-For JSON and TSV files, include a `sample_id` for each complex.
-
-## Mutation lists and scanning
-
-In the [DNA command](run_dna.sh), replace `--mutation M1A` with one of:
-
-- `--mutations 'M1A|F3A|Y6A'`: independent mutations in input order.
-- `--mutation-file /examples/PremPNI_upload_example_dna.txt`: TXT/CSV/TSV mutation list; comments beginning with `#` and mutation headers are supported.
-- `--alanine-scan`: one XnA row per protein position. Existing alanines return `0.000`, Destabilizing, `computed=false`, without model computation.
-
-For RNA, use `M1A|P4A|R7A` or `/examples/PremPNI_upload_example_rna.txt`.
+All rows are checked before prediction starts. Empty chains, invalid sequences, duplicate Job Names and mutations that do not match the wild-type sequence are rejected.
 
 ## Output
 
-```text
-<sample_id> M1A PremPDI2: 0.329 Destabilizing
-<sample_id> M1A PremPRI2: -0.541 Stabilizing
-```
+The main result file is `output/collections/JOB_ID/prempni_prediction.tsv`. It is Tab-separated and preserves the original five input columns, including `&` between nucleic acid chains, in the original row order. Two result columns are appended:
 
-ΔΔG is reported in kcal/mol. Results include `prempni_prediction.csv`, `prempni_prediction.json` and `job.json`:
+| Added Column | Meaning |
+| --- | --- |
+| Predicted ΔΔG (kcal/mol) | Predicted binding affinity change, displayed to three decimal places |
+| Predicted effect | Stab: ΔΔG < 0; Des: ΔΔG ≥ 0, using the value before rounding |
 
-- Command-line DNA example: `output/protein_dna/<sample_id>/prediction/`
-- Command-line RNA example: `output/protein_rna/<sample_id>/prediction/`
-- JSON example: `<sample_id>` is the name specified in the JSON file.
-- Multiple complexes: `output/collections/JOB_ID/`
+See the [complete reference output](PremPNI_prediction_example.tsv). Failed predictions keep their input row with the two result cells empty; details are recorded in `job.json`.
