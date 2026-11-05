@@ -8,7 +8,7 @@ PremPNI predicts the effects of single amino acid substitutions on protein–**D
 
 ## PremPNI Installation and Usage Instructions
 
-### 1. Download the Docker Image
+### 1. Pull Docker Image
 
 Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is installed, then download the image:
 
@@ -23,7 +23,7 @@ docker pull ghcr.io/minghuilab/prempni
 > 1 Gbps: ~2 min<br>
 > (actual time depends on your network speed)
 
-### 2. Start the Docker Container
+### 2. Run the Docker Container
 
 Run this command in a terminal on your computer:
 
@@ -35,7 +35,7 @@ This opens a terminal inside the container at `/opt/prempni/`, with the environm
 
 On your computer, use `docker ps -a` to find the container name and `docker start -ai <CONTAINER_NAME>` to return to it.
 
-### 3. Prepare Input Files
+### 3. Preparing Input Files
 
 The image includes the program, trained models and example input files. The DNA and RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these four columns:
 
@@ -61,7 +61,7 @@ Use the same format for your own data. To test several substitutions, put each o
 
 To copy your input file into the container, run `docker cp input.tsv <CONTAINER_NAME>:/data/input/input.tsv` in another terminal on your computer.
 
-### 4. Run PremPNI
+### 4. Running PremPNI
 
 Run the following Python commands **inside the container**. `run_prempni.py` is the entry point for both single-row and multi-row input files. `--input` specifies the input file, and `--output` specifies the results directory.
 
@@ -81,7 +81,7 @@ python run_prempni.py \
   --output /data/output
 ```
 
-### 5. Understand the Output Files
+### 5. Understanding Output Files
 
 A Run ID identifies one prediction run. It is generated automatically from `PNI`, the UTC start time (`YYYYMMDD-HHMMSS`), and five random uppercase letters, e.g. `PNI-20261105-051102-MXGMG` (illustrative; each run receives a new ID).
 
