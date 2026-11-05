@@ -83,6 +83,8 @@ python run_prempni.py \
 
 ### 5. Understand the Output Files
 
+A Job ID identifies one prediction run. It is generated automatically from `PNI`, the UTC start time (`YYYYMMDD-HHMMSS`), and five random uppercase letters, e.g. `PNI-20261105-051102-MXGMG`.
+
 Each run automatically creates a `<JOB_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. With the default folders, the result file is:
 
 ```text
