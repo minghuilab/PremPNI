@@ -23,7 +23,20 @@ docker pull ghcr.io/minghuilab/prempni
 > 1 Gbps: ~2 min<br>
 > (actual time depends on your network speed)
 
-### 2. Input Files
+### 2. Start the Docker Container
+
+The image includes `/data/input/` and `/data/output/`. Run this command from the folder where you want to keep your input files and results. PremPNI creates `input/` and `output/` there automatically when the container starts.
+
+```bash
+docker run -it --rm \
+  --user "$(id -u):$(id -g)" \
+  -v "$PWD:/data" \
+  ghcr.io/minghuilab/prempni bash
+```
+
+This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/data/input/` and `/data/output/`. The `--user` option keeps new files owned by your current user. No environment activation is required. After startup, you can place your own file at `input/input.tsv` using your computer's file manager or another terminal. Existing files are preserved. `--rm` removes the container after you exit; the image and results in your local `output/` folder are retained.
+
+### 3. Prepare Input Files
 
 The image includes the program, trained models and example input files. The DNA and RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these five columns:
 
@@ -47,33 +60,6 @@ The example files are:
 | [prempni_rna_example.tsv](Examples/prempni_rna_example.tsv) | Protein-RNA M1A; 282 amino acids and one 29 nt RNA chain |
 
 Use the same format for your own data. To test several substitutions, put each one on a separate row with a unique Job name. Do not combine substitutions within a cell. Input order is preserved.
-
-### 3. Start the Docker Container
-
-The image includes `/data/input/` and `/data/output/`. Run this command from the folder where you want to keep your input files and results. PremPNI creates `input/` and `output/` there automatically when the container starts.
-
-```bash
-docker run -it --rm \
-  --user "$(id -u):$(id -g)" \
-  -v "$PWD:/data" \
-  ghcr.io/minghuilab/prempni bash
-```
-
-This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/data/input/` and `/data/output/`. The `--user` option keeps new files owned by your current user. No environment activation is required. After startup, you can place your own file at `input/input.tsv` using your computer's file manager or another terminal. Existing files are preserved. `--rm` removes the container after you exit; the image and results in your local `output/` folder are retained.
-
-**Use your own folders (optional)**
-
-You can choose separate input and output folders anywhere on your computer. Replace `/home/yourname/my_inputs` and `/home/yourname/my_results` below with the full paths to existing folders you want to use. Choose a writable folder for results.
-
-```bash
-docker run -it --rm \
-  --user "$(id -u):$(id -g)" \
-  --mount "type=bind,source=/home/yourname/my_inputs,target=/data/input,readonly" \
-  --mount "type=bind,source=/home/yourname/my_results,target=/data/output" \
-  ghcr.io/minghuilab/prempni bash
-```
-
-Inside the container, `/data/input/` refers to your chosen input folder and `/data/output/` refers to your chosen results folder. Input files are read-only; results are written to your chosen output folder and remain there after you exit. Use this startup command instead of the default command above.
 
 ### 4. Run PremPNI
 
