@@ -44,8 +44,8 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 ```
 
 - **Type:** `Protein-DNA` or `Protein-RNA`.
-- **Wild-type protein sequence:** the complete protein sequence before mutation, using the 20 standard amino acids.
-- **Nucleic acid sequence:** use `&` between chains; write each chain in the 5′→3′ direction (T for DNA, U for RNA).
+- **Wild-type protein sequence:** The wild-type protein sequence using the 20 standard amino acid one-letter codes.
+- **Nucleic acid sequence:** Multiple nucleic acid chains are separated by `&`. Enter each chain in the 5′→3′ direction, using T for DNA and U for RNA.
 - **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
 
 ### 4. Running PremPNI
