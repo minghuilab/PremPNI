@@ -23,26 +23,9 @@ docker pull ghcr.io/minghuilab/prempni
 > 1 Gbps: ~2 min<br>
 > (actual time depends on your network speed)
 
-### 2. Run the Docker Container
+### 2. Input Files
 
-Check that the container can start:
-
-```bash
-docker run --rm ghcr.io/minghuilab/prempni --help
-```
-
-The image includes the program and trained models. Each command starts and stops the container automatically.
-
-### 3. Prepare the Input File
-
-Create a working folder:
-
-```bash
-mkdir -p prempni/input prempni/output
-cd prempni
-```
-
-Save the [example file](Examples/PremPNI_complexes_example.tsv) as `input/input.tsv`, then edit it for your own data. Use **Tab** to separate these five columns:
+The image includes the program, trained models and example input files. No separate example download is needed. The examples use **Tab** to separate these five columns:
 
 ```text
 Job Name	Type	Wild-Type Protein Sequence	Nucleic Acid Sequence	Mutation
@@ -56,11 +39,34 @@ RNA_example	RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSS
 - **Nucleic Acid Sequence:** use `&` between chains; write each chain in the 5′→3′ direction (T for DNA, U for RNA).
 - **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
 
-See [more input examples](Examples/README.md) for separate DNA and RNA files.
+See [input examples](Examples/README.md) for the separate DNA and RNA files. Use the same format for your own data.
 
-### 4. Run PremPNI
+### 3. Run PremPNI
 
-Run this command from your `prempni` working folder:
+**Run the included example**
+
+Create a folder for the results, then run the DNA/RNA example already inside the image:
+
+```bash
+mkdir -p output
+docker run --rm \
+  -v "$PWD/output:/output" \
+  ghcr.io/minghuilab/prempni \
+  --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+```
+
+Results are saved in your local `output/` folder. No environment activation is required.
+
+**Use your own input**
+
+Create two folders at the same level:
+
+```bash
+mkdir -p input
+mkdir -p output
+```
+
+Place your own Tab-separated file at `input/input.tsv`, then run:
 
 ```bash
 docker run --rm \
@@ -70,11 +76,11 @@ docker run --rm \
   --input-tsv /input/input.tsv
 ```
 
-Docker reads your local `input/input.tsv` and saves results in your local `output/` folder. Each row is predicted independently.
+`input/` holds your own input file; `output/` holds the prediction results. Each input row is predicted independently.
 
 Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
-### 5. Understand the Output Files
+### 4. Understand the Output Files
 
 The main result file is saved under a folder created for each run:
 
@@ -97,7 +103,7 @@ Reference values for the [complete example output](Examples/PremPNI_prediction_e
 
 **Stab:** ΔΔG < 0. **Des:** ΔΔG ≥ 0. Predicted effect is assigned before rounding.
 
-### 6. Recommended System
+### 5. Recommended System
 
 We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker installed. A GPU is not required.
 
