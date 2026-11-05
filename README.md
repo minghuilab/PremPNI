@@ -95,18 +95,6 @@ python run_prempni.py \
   --output /data/output
 ```
 
-**Choose a different input filename or result subfolder**
-
-```bash
-python run_prempni.py \
-  --input /data/input/my_jobs.tsv \
-  --output /data/output/project_A
-```
-
-`--input` accepts a file path, including its filename. `--output` accepts a directory path and creates missing subdirectories automatically. With the custom folders above, this example reads `/home/yourname/my_inputs/my_jobs.tsv` and saves results under `/home/yourname/my_results/project_A/`.
-
-Each input row is predicted independently. All rows are validated before prediction starts. Results are saved in the selected output folder on your computer. You can run more predictions in the same container. When finished, type `exit` to return to your computer's terminal.
-
 Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
 ### 5. Understand the Output Files
