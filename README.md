@@ -61,6 +61,20 @@ docker run -it --rm \
 
 This opens a terminal inside the container at `/opt/prempni/`. The local `input/` and `output/` folders are available as `/data/input/` and `/data/output/`. The `--user` option keeps new files owned by your current user. No environment activation is required. After startup, you can place your own file at `input/input.tsv` using your computer's file manager or another terminal. Existing files are preserved. `--rm` removes the container after you exit; the image and results in your local `output/` folder are retained.
 
+**Use your own folders (optional)**
+
+You can choose separate input and output folders anywhere on your computer. Replace `/home/yourname/my_inputs` and `/home/yourname/my_results` below with the full paths to existing folders you want to use. Choose a writable folder for results.
+
+```bash
+docker run -it --rm \
+  --user "$(id -u):$(id -g)" \
+  --mount "type=bind,source=/home/yourname/my_inputs,target=/data/input,readonly" \
+  --mount "type=bind,source=/home/yourname/my_results,target=/data/output" \
+  ghcr.io/minghuilab/prempni bash
+```
+
+Inside the container, `/data/input/` refers to your chosen input folder and `/data/output/` refers to your chosen results folder. Input files are read-only; results are written to your chosen output folder and remain there after you exit. Use this startup command instead of the default command above.
+
 ### 4. Run PremPNI
 
 Run the following Python commands **inside the container**. `run_prempni.py` is the entry point for both single-row and multi-row input files. `--input` specifies the input file, and `--output` specifies the results directory.
@@ -89,13 +103,23 @@ python run_prempni.py \
   --output /data/output
 ```
 
-Each input row is predicted independently. All rows are validated before prediction starts. Results are saved in the local `output/` folder on your computer. You can run more predictions in the same container. When finished, type `exit` to return to your computer's terminal.
+**Choose a different input filename or result subfolder**
+
+```bash
+python run_prempni.py \
+  --input /data/input/my_jobs.tsv \
+  --output /data/output/project_A
+```
+
+`--input` accepts a file path, including its filename. `--output` accepts a directory path and creates missing subdirectories automatically. With the custom folders above, this example reads `/home/yourname/my_inputs/my_jobs.tsv` and saves results under `/home/yourname/my_results/project_A/`.
+
+Each input row is predicted independently. All rows are validated before prediction starts. Results are saved in the selected output folder on your computer. You can run more predictions in the same container. When finished, type `exit` to return to your computer's terminal.
 
 Reference CPU runtimes for one mutation are approximately **22 seconds for DNA** (272 amino acids) and **62 seconds for RNA** (282 amino acids), measured using 10 CPUs and a 64 GiB memory limit. Actual time varies with sequence length and hardware; image downloading is excluded.
 
 ### 5. Understand the Output Files
 
-The main result file is saved under a folder created for each run:
+Each run creates a `collections/<JOB_ID>/` subfolder in the directory selected with `--output`. With the default folders, the main result file is:
 
 ```text
 output/collections/<JOB_ID>/prempni_prediction.tsv
