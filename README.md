@@ -18,7 +18,7 @@ Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is installed, t
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-- **Image size:** 18.9 GB (download: 14.7 GB)
+- **Image size:** 18.9 GB
 - **Estimated download time (approximate):**
 
 > 100 Mbps: ~20 min<br>
