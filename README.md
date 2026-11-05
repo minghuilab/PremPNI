@@ -102,13 +102,10 @@ The output is **Tab-separated**. It keeps the original four input columns and ad
 
 **Stabilizing:** ΔΔG < 0. **Destabilizing:** ΔΔG ≥ 0.
 
-### 6. Recommended System
+### 6. Recommended System Requirements
 
-We recommend **Linux on a 64-bit Intel or AMD computer**, with Docker installed. A GPU is not required.
-
-| Resource | Recommendation |
-| --- | --- |
-| CPU | 10 CPU cores for runtimes similar to the example tests |
-| Memory | 64 GB or more; longer sequences may require more memory |
+- **Operating system:** 64-bit Linux (Intel or AMD), with Docker installed.
+- **CPU:** 10 CPU cores recommended; a GPU is not required.
+- **RAM:** ≥64 GB recommended (longer sequences may require more memory).
 
 Academic, non-commercial use only. [License](Examples/licenses/LICENSE) · [Third-party notices](Examples/licenses/THIRD_PARTY_NOTICES.md).
