@@ -9,6 +9,8 @@ See each workbook's `README` sheet for details.
 | S1664 | Protein–DNA | 1,664 | Sequence-based |
 | S1150 | Protein–RNA | 1,150 | Sequence-based |
 
-S1336 and S599 are structure-based datasets that provide PDB and chain identifiers, mutations and experimental ΔΔG values for protein–DNA and protein–RNA complexes, respectively. S1664 and S1150 are sequence-based datasets that provide wild-type protein sequences, corresponding DNA or RNA sequences, mutations and experimental ΔΔG values.
+S1336 and S599 comprise structure-based mutation records for protein–DNA and protein–RNA complexes, respectively, annotated with PDB and chain identifiers, amino acid substitutions, and experimental changes in binding free energy (ΔΔG).
+
+S1664 and S1150 comprise sequence-based mutation records for protein–DNA and protein–RNA interactions, respectively, annotated with wild-type protein sequences, corresponding nucleic acid sequences, amino acid substitutions, and experimental ΔΔG values.
 
 All ΔΔG values are in kcal/mol.
