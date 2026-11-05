@@ -90,7 +90,7 @@ Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected
 output/<RUN_ID>/prempni_prediction.tsv
 ```
 
-The output is **Tab-separated**. It keeps the original four input columns and adds two result columns. The [example output](Examples/PremPNI_prediction_example.tsv) is shown below; scroll horizontally to view all six columns and the complete sequences.
+The output is **Tab-separated**. It keeps the original four input columns and adds two result columns. The example output is shown below; scroll horizontally to view all six columns and the complete sequences.
 
 | Type | Wild-type protein sequence | Nucleic acid sequence | Mutation | Predicted ΔΔG (kcal/mol) | Predicted effect |
 | --- | --- | --- | --- | --- | --- |
