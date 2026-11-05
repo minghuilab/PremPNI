@@ -80,8 +80,6 @@ Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected
 /data/output/<RUN_ID>/prempni_prediction.tsv
 ```
 
-To copy the results to your computer, run `docker cp <CONTAINER_NAME>:/data/output .` in your computer's terminal. This copies the `output/` folder into your current folder.
-
 The output is **Tab-separated**. It keeps the original four input columns and adds two result columns. The example output is shown below; scroll horizontally to view all six columns and the complete sequences.
 
 | Type | Wild-type protein sequence | Nucleic acid sequence | Mutation | Predicted ΔΔG (kcal/mol) | Predicted effect |
