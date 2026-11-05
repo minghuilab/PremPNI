@@ -8,21 +8,29 @@ These input files are included in the image under `/opt/prempni/examples/`. The 
 
 | File | Contents |
 | --- | --- |
-| [PremPNI_complexes_example.tsv](PremPNI_complexes_example.tsv) | One DNA and one RNA prediction |
 | [prempni_dna_example.tsv](prempni_dna_example.tsv) | DNA M1A; 272 amino acids and two 14 nt DNA chains |
 | [prempni_rna_example.tsv](prempni_rna_example.tsv) | RNA M1A; 282 amino acids and one 29 nt RNA chain |
 
-## Run the Included Example
+## Run the Included Examples
 
 ```bash
 mkdir -p output
+# DNA example
 docker run --rm \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni \
-  --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+  --input-tsv /opt/prempni/examples/prempni_dna_example.tsv
 ```
 
-For only DNA or RNA, replace the final filename with `prempni_dna_example.tsv` or `prempni_rna_example.tsv`. Keep the `/opt/prempni/examples/` directory in the command. Results are saved in your local `output/` folder.
+```bash
+# RNA example
+docker run --rm \
+  -v "$PWD/output:/output" \
+  ghcr.io/minghuilab/prempni \
+  --input-tsv /opt/prempni/examples/prempni_rna_example.tsv
+```
+
+Results from either example are saved in your local `output/` folder.
 
 ## Five-Column Format
 

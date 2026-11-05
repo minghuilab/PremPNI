@@ -25,7 +25,7 @@ docker pull ghcr.io/minghuilab/prempni
 
 ### 2. Input Files
 
-The image includes the program, trained models and example input files. No separate example download is needed. The examples use **Tab** to separate these five columns:
+The image includes the program, trained models and example input files. The DNA and RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these five columns:
 
 ```text
 Job Name	Type	Wild-Type Protein Sequence	Nucleic Acid Sequence	Mutation
@@ -43,16 +43,25 @@ See [input examples](Examples/README.md) for the separate DNA and RNA files. Use
 
 ### 3. Run PremPNI
 
-**Run the included example**
+**Run the included examples**
 
-Create a folder for the results, then run the DNA/RNA example already inside the image:
+Create a folder for the results, then run either example inside the image:
 
 ```bash
 mkdir -p output
+# DNA example
 docker run --rm \
   -v "$PWD/output:/output" \
   ghcr.io/minghuilab/prempni \
-  --input-tsv /opt/prempni/examples/PremPNI_complexes_example.tsv
+  --input-tsv /opt/prempni/examples/prempni_dna_example.tsv
+```
+
+```bash
+# RNA example
+docker run --rm \
+  -v "$PWD/output:/output" \
+  ghcr.io/minghuilab/prempni \
+  --input-tsv /opt/prempni/examples/prempni_rna_example.tsv
 ```
 
 Results are saved in your local `output/` folder. No environment activation is required.
