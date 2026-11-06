@@ -2,11 +2,14 @@
 
 ## About
 
-PremPNI predicts the effects of single amino acid substitutions on protein–**DNA (PremPDI2)** and protein–**RNA (PremPRI2)** binding affinity. For each substitution, PremPNI predicts the change in binding free energy (ΔΔG, kcal/mol), classified as stabilizing (ΔΔG < 0) or destabilizing (ΔΔG ≥ 0). Users only need to provide the wild-type protein and corresponding DNA or RNA sequence(s) and specify the amino acid substitution(s). No 3D structure is required.
+PremPNI predicts the effects of single amino acid substitutions on protein–**DNA (PremPDI2)** and protein–**RNA (PremPRI2)** binding affinity. For each substitution, PremPNI predicts the change in binding free energy (ΔΔG, kcal/mol), classified as stabilizing (ΔΔG < 0) or destabilizing (ΔΔG ≥ 0).
+
+Users only need to provide the wild-type protein and corresponding DNA or RNA sequence(s) and specify the amino acid substitution(s). No 3D structure is required.
 
 ## Scoring mutations with PremPNI
 
-We recommend that most users who just want to obtain PremPNI predictions use [PremPNI website](https://lilab.jysw.suda.edu.cn/research/PremPNI/) to obtain scores.
+> [!TIP]
+> We recommend that most users who just want to obtain PremPNI predictions use [PremPNI website](https://lilab.jysw.suda.edu.cn/research/PremPNI/) to obtain scores.
 
 ## PremPNI Installation and Usage Instructions
 
@@ -18,12 +21,9 @@ Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is installed, t
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-- **Image size:** 18.9 GB
-- **Estimated download time (approximate):**
-
-> 100 Mbps: ~20 min<br>
-> 1 Gbps: ~2 min<br>
-> (actual time depends on your network speed)
+**Image size:** 18.9 GB\
+**Estimated download time:** ~20 min at 100 Mbps · ~2 min at 1 Gbps\
+*Actual time depends on your network speed.*
 
 ### 2. Run the Docker Container
 
@@ -37,15 +37,20 @@ The container includes `/data/input/` for input files and `/data/output/` for pr
 
 ### 3. Preparing Input Files
 
-The image includes the program, trained models and example input files. The protein-DNA and protein-RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these four columns:
+The image includes the program, trained models and example input files. The examples are stored in `/opt/prempni/examples/`.
+
+- **Protein-DNA:** `prempni_dna_example.tsv`
+- **Protein-RNA:** `prempni_rna_example.tsv`
+
+The examples use **Tab** to separate these four columns:
 
 <table>
 <thead>
 <tr>
-<th>Type</th>
-<th>Wild-type protein sequence</th>
-<th>Nucleic acid sequence</th>
-<th>Mutation</th>
+<th align="left" nowrap>Type</th>
+<th align="left" nowrap>Wild-type protein sequence</th>
+<th align="left" nowrap>Nucleic acid sequence</th>
+<th align="left" nowrap>Mutation</th>
 </tr>
 </thead>
 <tbody>
@@ -71,9 +76,11 @@ The image includes the program, trained models and example input files. The prot
 
 ### 4. Running PremPNI
 
-Run the following Python commands **inside the container**. `run_prempni.py` predicts the effects of one or more single amino acid substitutions, with each substitution entered on a separate row and predicted independently. `--input` specifies the input file, and `--output` specifies the results directory.
+Run the following Python commands **inside the container**.
 
-**Protein-DNA example**
+`run_prempni.py` predicts the effects of one or more single amino acid substitutions, with each substitution entered on a separate row and predicted independently. `--input` specifies the input file, and `--output` specifies the results directory.
+
+#### Protein-DNA example
 
 ```bash
 python run_prempni.py \
@@ -81,7 +88,7 @@ python run_prempni.py \
   --output /data/output
 ```
 
-**Protein-RNA example**
+#### Protein-RNA example
 
 ```bash
 python run_prempni.py \
@@ -91,7 +98,9 @@ python run_prempni.py \
 
 ### 5. Understanding Output Files
 
-PremPNI automatically generates a Run ID for each prediction run and uses it to name the results folder. In `PNI-20261105-051102-MXGMG`, `PNI` is a fixed prefix, `20261105-051102` records the start time (5 November 2026 at 05:11:02 UTC), and `MXGMG` consists of five randomly chosen uppercase letters.
+PremPNI automatically generates a Run ID for each prediction run and uses it to name the results folder.
+
+In `PNI-20261105-051102-MXGMG`, `PNI` is a fixed prefix, `20261105-051102` records the start time (5 November 2026 at 05:11:02 UTC), and `MXGMG` consists of five randomly chosen uppercase letters.
 
 Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. The result file is saved inside the container at:
 
@@ -104,12 +113,12 @@ The output is **Tab-separated**. It keeps the original four input columns and ad
 <table>
 <thead>
 <tr>
-<th>Type</th>
-<th>Wild-type protein sequence</th>
-<th>Nucleic acid sequence</th>
-<th>Mutation</th>
-<th>Predicted ΔΔG (kcal/mol)</th>
-<th>Predicted effect</th>
+<th align="left" nowrap>Type</th>
+<th align="left" nowrap>Wild-type protein sequence</th>
+<th align="left" nowrap>Nucleic acid sequence</th>
+<th align="left" nowrap>Mutation</th>
+<th align="right" nowrap>Predicted ΔΔG (kcal/mol)</th>
+<th align="left" nowrap>Predicted effect</th>
 </tr>
 </thead>
 <tbody>
@@ -118,7 +127,7 @@ The output is **Tab-separated**. It keeps the original four input columns and ad
 <td><code>MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK</code></td>
 <td><code>CTCGACCGGTCGAG&amp;CTCGACCGGTCGAG</code></td>
 <td>M1A</td>
-<td>0.329</td>
+<td align="right">0.329</td>
 <td>Destabilizing</td>
 </tr>
 <tr>
@@ -126,7 +135,7 @@ The output is **Tab-separated**. It keeps the original four input columns and ad
 <td><code>MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK</code></td>
 <td><code>GGCAGAUCUGAGCCUGGGAGCUCUCUGCC</code></td>
 <td>M1A</td>
-<td>-0.541</td>
+<td align="right">-0.541</td>
 <td>Stabilizing</td>
 </tr>
 </tbody>
