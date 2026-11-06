@@ -22,6 +22,6 @@ CatBoost and ExtraTrees predictions were obtained using leave-one-complex-out cr
 
 ## Sequence-based training datasets
 
-S1664 and S1150 were used to train the sequence-based models. Each record contains an amino acid substitution, the wild-type protein sequence, the corresponding DNA or RNA sequence(s), and experimental ΔΔG.
+Each record includes an amino acid substitution, the wild-type protein sequence, the corresponding DNA or RNA sequence(s), and experimental ΔΔG. S1664 and S1150 were used to train the sequence-based models.
 
 See the `README` sheet in each workbook for details.
