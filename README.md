@@ -22,9 +22,12 @@ Docker Installation Guide ([https://docs.docker.com/get-started/get-docker/](htt
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-**Image size:** 18.9 GB\
-**Estimated download time:** ~20 min at 100 Mbps · ~2 min at 1 Gbps\
-*Actual time depends on your network speed.*
+• Image size: 18.9 GB\
+• Estimated download time (approximate):
+
+> 100 Mbps: ~20 min\
+> 1 Gbps: ~2 min\
+> (actual time depends on network speed)
 
 ### 2. Run the Docker Container and Activate Environment
 
