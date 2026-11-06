@@ -38,5 +38,3 @@ Select a dataset name to access its workbook.
 - **DNA sequence / RNA sequence:** The DNA sequence(s) in S1664 or RNA sequence(s) in S1150. Multiple sequences are separated by `&`.
 
 - **Experimental ΔΔG (kcal/mol):** The experimentally measured change in binding free energy caused by the mutation.
-
-See the `README` sheet in each workbook for details.
