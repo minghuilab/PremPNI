@@ -91,7 +91,7 @@ python run_prempni.py \
 
 ### 5. Understanding Output Files
 
-A Run ID identifies one prediction run. It is generated automatically from `PNI`, the UTC start time (`YYYYMMDD-HHMMSS`), and five random uppercase letters, e.g. `PNI-20261105-051102-MXGMG` (illustrative; each run receives a new ID).
+PremPNI automatically generates a Run ID for each prediction run and uses it to name the results folder. In `PNI-20261105-051102-MXGMG`, `PNI` is a fixed prefix, `20261105-051102` records the start time (5 November 2026 at 05:11:02 UTC), and `MXGMG` consists of five randomly chosen uppercase letters.
 
 Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. The result file is saved inside the container at:
 
