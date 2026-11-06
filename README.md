@@ -35,17 +35,15 @@ docker run -it ghcr.io/minghuilab/prempni bash
 
 ### 3. Preparing Input Files
 
-Inside the Docker container, create a folder to store input files (replace \<folder_name> with your chosen folder name):
+Please create a folder to store input files:
 
 ```bash
 mkdir -p /prempni/folder_name
 ```
 
-Alternatively, use `/prempni/prempni_input/` for the provided example input files:
+Alternatively, use the predefined directory `/prempni/prempni_input/` to store your input files. This directory already contains the example files `prempni_dna_example.tsv` and `prempni_rna_example.tsv`.
 
-The files `prempni_dna_example.tsv` and `prempni_rna_example.tsv` are already included in this directory.
-
-Prepare input mutations in the following tab-separated format:
+Prepare your mutation input files in the following tab-separated format:
 
 ```text
 Type	Wild-type protein sequence	Nucleic acid sequence	Mutation
@@ -55,13 +53,13 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 **Note:**
 
-- **Type:** `Protein-DNA` or `Protein-RNA`.
+- **Type:** Interaction type: `Protein-DNA` or `Protein-RNA`.
 
-- **Wild-type protein sequence:** Use the one-letter codes for the 20 standard amino acids.
+- **Wild-type protein sequence:** Amino acid sequence using the one-letter codes for the 20 standard amino acids.
 
-- **Nucleic acid sequence:** Multiple nucleic acid chains are separated by `&`.
+- **Nucleic acid sequence:** DNA or RNA sequence; separate multiple chains with `&`.
 
-- **Mutation:** one substitution per row, such as `M1A`.
+- **Mutation:** One amino acid substitution per row, such as `M1A` (M to A at position 1).
 
 ### 4. Running PremPNI
 
