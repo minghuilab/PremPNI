@@ -87,7 +87,7 @@ python run_prempni.py \
 
 ### 5. Understanding Output Files
 
-For each run, PremPNI saves a tab-separated result file named `prempni_prediction.tsv` under the specified output directory.
+After running PremPNI, a tab-separated result file named `prempni_prediction.tsv` will be generated under the specified output directory.
 
 The outputs for `prempni_dna_example_input.tsv` and `prempni_rna_example_input.tsv` are provided in [prempni_dna_example_output.tsv](Example/prempni_dna_example_output.tsv) and [prempni_rna_example_output.tsv](Example/prempni_rna_example_output.tsv), respectively.
 
