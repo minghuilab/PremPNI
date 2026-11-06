@@ -1,7 +1,5 @@
 # PremPNI datasets
 
-These datasets cover amino acid substitutions in protein–DNA and protein–RNA interactions. Each record includes the experimental change in binding free energy (ΔΔG, kcal/mol).
-
 Select a dataset name to access its workbook.
 
 | Dataset | Interaction | Records | Type |
