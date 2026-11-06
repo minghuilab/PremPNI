@@ -35,19 +35,13 @@ docker run -it ghcr.io/minghuilab/prempni bash
 
 ### 3. Preparing Input Files
 
-**Please specify an input folder name (`<folder_name>`) and prepare a tab-separated input file (`.tsv`) with the four columns shown below.**
-
-Replace `<folder_name>` with your chosen folder name, then create the input directory inside the container:
+Inside the Docker container, create a folder to store input files (replace **folder_name** with your chosen folder name):
 
 ```bash
-mkdir -p "/data/<folder_name>"
+mkdir -p /data/folder_name
 ```
 
-Place your input file in `/data/<folder_name>/`. When running PremPNI, set `--input` to the full path of that file.
-
-For the provided examples, `<folder_name>` is `PremPNI_input`, and the input directory is `/data/PremPNI_input/`.
-
-Copy the provided protein-DNA and protein-RNA example files into this directory:
+Alternatively, use `/data/PremPNI_input/` for the provided example input files:
 
 ```bash
 mkdir -p /data/PremPNI_input
@@ -55,7 +49,7 @@ cp /opt/prempni/examples/prempni_dna_example.tsv /data/PremPNI_input/
 cp /opt/prempni/examples/prempni_rna_example.tsv /data/PremPNI_input/
 ```
 
-The reference format for the input file is shown below:
+Prepare input mutations in the following tab-separated format:
 
 ```text
 Type	Wild-type protein sequence	Nucleic acid sequence	Mutation
@@ -103,6 +97,6 @@ The result file, [prempni_prediction.tsv](Example/prempni_prediction.tsv), is **
 
 ### 6. Recommended System Requirements
 
-- **Operating system:** 64-bit Linux (Intel or AMD), with Docker installed.
 - **CPU:** 10 CPU cores recommended; a GPU is not required.
+
 - **RAM:** ≥64 GB recommended (longer sequences may require more memory).
