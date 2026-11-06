@@ -11,15 +11,32 @@ Select a dataset name to access its workbook.
 
 ## Structure-based datasets
 
-Each record includes a PDB ID, the protein and nucleic acid chain identifiers, the mutated chain, the amino acid substitution, and experimental ΔΔG.
+- **PDB ID:** The PDB identifier of the protein–nucleic acid complex.
 
-- **S1336** marks membership in the leakage-controlled benchmark subset S441 and reports CatBoost and PremPDI2 predictions.
-- **S599** marks membership in the leakage-controlled benchmark subset S260 and reports ExtraTrees and PremPRI2 predictions.
+- **Protein chains:** The protein chain identifiers in the complex.
 
-CatBoost and ExtraTrees predictions were obtained using leave-one-complex-out cross-validation (LOCOV).
+- **Nucleic acid chains:** The DNA or RNA chain identifiers in the complex.
 
-## Sequence-based training datasets
+- **Mutated chain:** The protein chain in which the mutation occurs.
 
-Each record includes an amino acid substitution, the wild-type protein sequence, the corresponding DNA or RNA sequence(s), and experimental ΔΔG. S1664 and S1150 were used to train the sequence-based models.
+- **Mutation:** The amino acid substitution, given as the wild-type residue, residue position, and mutant residue.
+
+- **Included in leakage-controlled benchmark set (S441/S260):** Whether the record belongs to S441 (in S1336) or S260 (in S599), indicated by Yes or No.
+
+- **Experimental ΔΔG (kcal/mol):** The experimentally measured change in binding free energy caused by the mutation.
+
+- **CatBoost / ExtraTrees predicted ΔΔG (LOCOV, kcal/mol):** The change in binding free energy predicted by CatBoost (in S1336) or ExtraTrees (in S599), using leave-one-complex-out cross-validation (LOCOV).
+
+- **PremPDI2 / PremPRI2 predicted ΔΔG (kcal/mol):** The change in binding free energy predicted by PremPDI2 (in S1336) or PremPRI2 (in S599).
+
+## Sequence-based datasets
+
+- **Mutation:** The amino acid substitution, given as the wild-type residue, residue position, and mutant residue.
+
+- **Wild-type protein sequence:** The protein sequence before mutation, using one-letter amino acid codes.
+
+- **DNA sequence / RNA sequence:** The DNA sequence(s) in S1664 or RNA sequence(s) in S1150. Multiple sequences are separated by `&`.
+
+- **Experimental ΔΔG (kcal/mol):** The experimentally measured change in binding free energy caused by the mutation.
 
 See the `README` sheet in each workbook for details.
