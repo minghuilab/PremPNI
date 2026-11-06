@@ -38,16 +38,12 @@ docker run -it ghcr.io/minghuilab/prempni bash
 Inside the Docker container, create a folder to store input files (replace \<folder_name> with your chosen folder name):
 
 ```bash
-mkdir -p /data/folder_name
+mkdir -p /prempni/folder_name
 ```
 
-Alternatively, use `/data/PremPNI_input/` for the provided example input files:
+Alternatively, use `/prempni/prempni_input/` for the provided example input files:
 
-```bash
-mkdir -p /data/PremPNI_input
-cp /opt/prempni/examples/prempni_dna_example.tsv /data/PremPNI_input/
-cp /opt/prempni/examples/prempni_rna_example.tsv /data/PremPNI_input/
-```
+The files `prempni_dna_example.tsv` and `prempni_rna_example.tsv` are already included in this directory.
 
 Prepare input mutations in the following tab-separated format:
 
@@ -77,16 +73,16 @@ Run the following Python commands **inside the container**.
 
 ```bash
 python run_prempni.py \
-  --input /data/PremPNI_input/prempni_dna_example.tsv \
-  --output /data/output
+  --input /prempni/prempni_input/prempni_dna_example.tsv \
+  --output /prempni/prempni_output
 ```
 
 #### Protein-RNA example
 
 ```bash
 python run_prempni.py \
-  --input /data/PremPNI_input/prempni_rna_example.tsv \
-  --output /data/output
+  --input /prempni/prempni_input/prempni_rna_example.tsv \
+  --output /prempni/prempni_output
 ```
 
 ### 5. Understanding Output Files
