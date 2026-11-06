@@ -37,7 +37,7 @@ The container includes `/data/input/` for input files and `/data/output/` for pr
 
 ### 3. Preparing Input Files
 
-The image includes the program, trained models and example input files. The DNA and RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these four columns:
+The image includes the program, trained models and example input files. The protein-DNA and protein-RNA examples are stored in `/opt/prempni/examples/` as `prempni_dna_example.tsv` and `prempni_rna_example.tsv`. The examples use **Tab** to separate these four columns:
 
 <table>
 <thead>
@@ -65,9 +65,9 @@ The image includes the program, trained models and example input files. The DNA 
 </table>
 
 - **Type:** `Protein-DNA` or `Protein-RNA`.
-- **Wild-type protein sequence:** The wild-type protein sequence using the 20 standard amino acid one-letter codes.
+- **Wild-type protein sequence:** Use the one-letter codes for the 20 standard amino acids.
 - **Nucleic acid sequence:** Multiple nucleic acid chains are separated by `&`. Enter each chain in the 5′→3′ direction, using T for DNA and U for RNA.
-- **Mutation:** one substitution per row, such as `M1A`; positions start at 1 in the supplied protein sequence.
+- **Mutation:** one substitution per row, such as `M1A`.
 
 ### 4. Running PremPNI
 
