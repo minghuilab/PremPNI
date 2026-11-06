@@ -35,7 +35,7 @@ docker run -it ghcr.io/minghuilab/prempni bash
 
 ### 3. Preparing Input Files
 
-Inside the Docker container, create a folder to store input files (replace **folder_name** with your chosen folder name):
+Inside the Docker container, create a folder to store input files (replace \<folder_name> with your chosen folder name):
 
 ```bash
 mkdir -p /data/folder_name
