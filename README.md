@@ -22,7 +22,7 @@ Docker Installation Guide ([https://docs.docker.com/get-started/get-docker/](htt
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-• Image size: 18.9 GB\
+• Image size: 16.4 GB\
 • Estimated download time (approximate):
 
 > 100 Mbps: ~20 min\
@@ -95,4 +95,4 @@ The outputs for `prempni_dna_example_input.tsv` and `prempni_rna_example_input.t
 
 • **RAM:** ≥64 GB recommended.
 
-• **Disk Space:** Space for the Docker image, plus additional space for input files, prediction results and temporary files.
+• **Disk Space:** ≥50 GB (Docker image: ~16.4 GB + additional space for data, output and temporary files).
