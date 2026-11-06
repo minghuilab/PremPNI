@@ -93,6 +93,6 @@ The outputs for `prempni_dna_example_input.tsv` and `prempni_rna_example_input.t
 
 ### 6. Recommended System Requirements
 
-• **RAM:** ≥64 GB recommended (longer sequences may require more memory).
+• **RAM:** ≥64 GB recommended.
 
 • **Disk Space:** Space for the Docker image, plus additional space for input files, prediction results and temporary files.
