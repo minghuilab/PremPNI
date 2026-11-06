@@ -33,45 +33,44 @@ Run this command in a terminal on your computer:
 docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-The container includes `/data/input/` for input files and `/data/output/` for prediction results.
-
 ### 3. Preparing Input Files
 
-The image includes the program, trained models and example input files. The examples are stored in `/opt/prempni/examples/`.
+**Please specify an input folder name (`<folder_name>`) and prepare a tab-separated input file (`.tsv`) with the four columns shown below.**
 
-- **Protein-DNA:** `prempni_dna_example.tsv`
-- **Protein-RNA:** `prempni_rna_example.tsv`
+Replace `<folder_name>` with your chosen folder name, then create the input directory inside the container:
 
-The examples use **Tab** to separate these four columns:
+```bash
+mkdir -p "/data/<folder_name>"
+```
 
-<table>
-<thead>
-<tr>
-<th align="left" nowrap>Type</th>
-<th align="left" nowrap>Wild-type protein sequence</th>
-<th align="left" nowrap>Nucleic acid sequence</th>
-<th align="left" nowrap>Mutation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td nowrap>Protein-DNA</td>
-<td><code>MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK</code></td>
-<td><code>CTCGACCGGTCGAG&amp;CTCGACCGGTCGAG</code></td>
-<td>M1A</td>
-</tr>
-<tr>
-<td nowrap>Protein-RNA</td>
-<td><code>MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK</code></td>
-<td><code>GGCAGAUCUGAGCCUGGGAGCUCUCUGCC</code></td>
-<td>M1A</td>
-</tr>
-</tbody>
-</table>
+Place your input file in `/data/<folder_name>/`. When running PremPNI, set `--input` to the full path of that file.
+
+For the provided examples, `<folder_name>` is `PremPNI_input`, and the input directory is `/data/PremPNI_input/`.
+
+Copy the provided protein-DNA and protein-RNA example files into this directory:
+
+```bash
+mkdir -p /data/PremPNI_input
+cp /opt/prempni/examples/prempni_dna_example.tsv /data/PremPNI_input/
+cp /opt/prempni/examples/prempni_rna_example.tsv /data/PremPNI_input/
+```
+
+The reference format for the input file is shown below:
+
+```text
+Type	Wild-type protein sequence	Nucleic acid sequence	Mutation
+Protein-DNA	MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK	CTCGACCGGTCGAG&CTCGACCGGTCGAG	M1A
+Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK	GGCAGAUCUGAGCCUGGGAGCUCUCUGCC	M1A
+```
+
+**Note:**
 
 - **Type:** `Protein-DNA` or `Protein-RNA`.
+
 - **Wild-type protein sequence:** Use the one-letter codes for the 20 standard amino acids.
-- **Nucleic acid sequence:** Multiple nucleic acid chains are separated by `&`. Enter each chain in the 5′→3′ direction, using T for DNA and U for RNA.
+
+- **Nucleic acid sequence:** Multiple nucleic acid chains are separated by `&`.
+
 - **Mutation:** one substitution per row, such as `M1A`.
 
 ### 4. Running PremPNI
@@ -84,7 +83,7 @@ Run the following Python commands **inside the container**.
 
 ```bash
 python run_prempni.py \
-  --input /opt/prempni/examples/prempni_dna_example.tsv \
+  --input /data/PremPNI_input/prempni_dna_example.tsv \
   --output /data/output
 ```
 
@@ -92,54 +91,13 @@ python run_prempni.py \
 
 ```bash
 python run_prempni.py \
-  --input /opt/prempni/examples/prempni_rna_example.tsv \
+  --input /data/PremPNI_input/prempni_rna_example.tsv \
   --output /data/output
 ```
 
 ### 5. Understanding Output Files
 
-PremPNI automatically generates a Run ID for each prediction run and uses it to name the results folder.
-
-In `PNI-20261105-051102-MXGMG`, `PNI` is a fixed prefix, `20261105-051102` records the start time (5 November 2026 at 05:11:02 UTC), and `MXGMG` consists of five randomly chosen uppercase letters.
-
-Each run automatically creates a `<RUN_ID>/` subfolder in the directory selected with `--output`, containing only `prempni_prediction.tsv`. The result file is saved inside the container at:
-
-```text
-/data/output/<RUN_ID>/prempni_prediction.tsv
-```
-
-The output is **Tab-separated**. It keeps the original four input columns and adds two result columns. The example output is shown below; scroll horizontally to view all six columns and the complete sequences.
-
-<table>
-<thead>
-<tr>
-<th align="left" nowrap>Type</th>
-<th align="left" nowrap>Wild-type protein sequence</th>
-<th align="left" nowrap>Nucleic acid sequence</th>
-<th align="left" nowrap>Mutation</th>
-<th align="right" nowrap>Predicted ΔΔG (kcal/mol)</th>
-<th align="left" nowrap>Predicted effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td nowrap>Protein-DNA</td>
-<td><code>MNFFEYCISTYAKIFEETMNAVGDERVSQKKAIRDTMISAMREFPNVEAAEIWKAVYSAHMDRKSGIADPDIIQKVISAENSWKKSSGHAFEEMIKLLGNSSLEEYGMRILLQKDLNMMIENQEIANEPRDINWLKEQISSNVFDLYITVRNNDKEYVFGCIQSKTSIRDRVTRDREPSMKAMEAFFWSVAICLDGDFLKMPKFIAMVNGGTSNYRLNGWHGMYVFWDKPTIDRIYPIDINLELFVQHAREAAEDWLHRRQWFNYEWKAGQK</code></td>
-<td><code>CTCGACCGGTCGAG&amp;CTCGACCGGTCGAG</code></td>
-<td>M1A</td>
-<td align="right">0.329</td>
-<td>Destabilizing</td>
-</tr>
-<tr>
-<td nowrap>Protein-RNA</td>
-<td><code>MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNALRSMQGFPFYDKPMRIQYAKTDSDIIAKMKGTFVERDRKREKRKPKSQETPATKKAVQGGGATPVVGAVQGPVPGMPPMTQAPRIMHHMPGQPPYMPPPGMIPPPGLAPGQIPPGAMPPQQLMPGQMPPAQPLSENPPNHILFLTNLPEETNELMLSMLFNQFPGFKEVRLVPGRHDIAFVEFDNEVQAGAARDALQGFKITQNNAMKISFAKK</code></td>
-<td><code>GGCAGAUCUGAGCCUGGGAGCUCUCUGCC</code></td>
-<td>M1A</td>
-<td align="right">-0.541</td>
-<td>Stabilizing</td>
-</tr>
-</tbody>
-</table>
+The result file, [prempni_prediction.tsv](Example/prempni_prediction.tsv), is **Tab-separated**. It keeps the original four input columns and adds **Predicted ΔΔG (kcal/mol)** and **Predicted effect**. Click the filename to view the example output.
 
 **Stabilizing:** ΔΔG < 0; **Destabilizing:** ΔΔG ≥ 0.
 
