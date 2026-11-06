@@ -93,6 +93,6 @@ The outputs for `prempni_dna_example_input.tsv` and `prempni_rna_example_input.t
 
 ### 6. Recommended System Requirements
 
-- **CPU:** 10 CPU cores recommended; a GPU is not required.
+• **CPU:** 10 CPU cores recommended; a GPU is not required.
 
-- **RAM:** ≥64 GB recommended (longer sequences may require more memory).
+• **RAM:** ≥64 GB recommended (longer sequences may require more memory).
