@@ -15,7 +15,8 @@ Users only need to provide the wild-type protein and corresponding DNA or RNA se
 
 ### 1. Pull Docker Image
 
-Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is installed, then download the image:
+Ensure Docker is installed:\
+Docker Installation Guide ([https://docs.docker.com/get-started/get-docker/](https://docs.docker.com/get-started/get-docker/))
 
 ```bash
 docker pull ghcr.io/minghuilab/prempni
@@ -25,15 +26,13 @@ docker pull ghcr.io/minghuilab/prempni
 **Estimated download time:** ~20 min at 100 Mbps · ~2 min at 1 Gbps\
 *Actual time depends on your network speed.*
 
-### 2. Run the Docker Container
-
-Run this command in a terminal on your computer:
+### 2. Run the Docker Container and Activate Environment
 
 ```bash
 docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-### 3. Preparing Input Files
+### 3. Preparing Input files and Dictionaries
 
 Please create a folder to store input files:
 
@@ -41,7 +40,7 @@ Please create a folder to store input files:
 mkdir -p /prempni/folder_name
 ```
 
-Alternatively, use the predefined directory `/prempni/prempni_input/` to store your input files. This directory already contains the example files `prempni_dna_example.tsv` and `prempni_rna_example.tsv`.
+Alternatively, use the predefined directory `/prempni/prempni_input/` to store your input files. This directory already contains the example files `prempni_dna_example_input.tsv` and `prempni_rna_example_input.tsv`.
 
 The reference format for the input file is shown below:
 
@@ -59,13 +58,11 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 - **Nucleic acid sequence:** DNA or RNA sequence; separate multiple chains with `&`.
 
-- **Mutation:** One amino acid substitution per row, such as `M1A` (M to A at position 1).
+- **Mutation:** One amino acid substitution per row, such as `M1A`.
 
-- Different columns are separated by **tabs**.
+- Different columns in the table are separated by tabs.
 
 ### 4. Running PremPNI
-
-Run the following Python commands **inside the container**.
 
 `run_prempni.py` predicts the effects of one or more single amino acid substitutions, with each substitution entered on a separate row and predicted independently. `--input` specifies the input file, and `--output` specifies the results directory.
 
@@ -73,7 +70,7 @@ Run the following Python commands **inside the container**.
 
 ```bash
 python run_prempni.py \
-  --input /prempni/prempni_input/prempni_dna_example.tsv \
+  --input /prempni/prempni_input/prempni_dna_example_input.tsv \
   --output /prempni/prempni_output
 ```
 
@@ -81,15 +78,15 @@ python run_prempni.py \
 
 ```bash
 python run_prempni.py \
-  --input /prempni/prempni_input/prempni_rna_example.tsv \
+  --input /prempni/prempni_input/prempni_rna_example_input.tsv \
   --output /prempni/prempni_output
 ```
 
 ### 5. Understanding Output Files
 
-The result file, [prempni_prediction.tsv](Example/prempni_prediction.tsv), is **Tab-separated**. It keeps the original four input columns and adds **Predicted ΔΔG (kcal/mol)** and **Predicted effect**. Click the filename to view the example output.
+For each run, PremPNI saves a tab-separated result file named `prempni_prediction.tsv` under the specified output directory.
 
-**Stabilizing:** ΔΔG < 0; **Destabilizing:** ΔΔG ≥ 0.
+The outputs for `prempni_dna_example_input.tsv` and `prempni_rna_example_input.tsv` are provided in [prempni_dna_example_output.tsv](Example/prempni_dna_example_output.tsv) and [prempni_rna_example_output.tsv](Example/prempni_rna_example_output.tsv), respectively.
 
 ### 6. Recommended System Requirements
 
