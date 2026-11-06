@@ -43,7 +43,7 @@ mkdir -p /prempni/folder_name
 
 Alternatively, use the predefined directory `/prempni/prempni_input/` to store your input files. This directory already contains the example files `prempni_dna_example.tsv` and `prempni_rna_example.tsv`.
 
-Prepare your mutation input files in the following tab-separated format:
+The reference format for the input file is shown below:
 
 ```text
 Type	Wild-type protein sequence	Nucleic acid sequence	Mutation
@@ -60,6 +60,8 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 - **Nucleic acid sequence:** DNA or RNA sequence; separate multiple chains with `&`.
 
 - **Mutation:** One amino acid substitution per row, such as `M1A` (M to A at position 1).
+
+- Different columns are separated by **tabs**.
 
 ### 4. Running PremPNI
 
