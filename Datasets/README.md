@@ -1,7 +1,5 @@
 # PremPNI datasets
 
-Select a dataset name to access its workbook.
-
 | Dataset | Interaction | Records | Type |
 | :--- | :--- | ---: | :--- |
 | [S1336](S1336.xlsx) | Protein–DNA | 1,336 | Structure-based |
