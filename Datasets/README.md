@@ -19,7 +19,7 @@
 
 - **Mutation:** Amino acid substitution in one-letter code (e.g., M1A).
 
-- `Included in leakage-controlled benchmark set (S441/S260)`: Indicates whether the entry is included in the leakage-controlled subset—`S441` for protein–DNA (`S1336`) or `S260` for protein–RNA (`S599`) (`Yes` / `No`).
+- **Included in leakage-controlled benchmark set (S441/S260):** Indicates whether the entry is included in the leakage-controlled subset—`S441` for protein–DNA (`S1336`) or `S260` for protein–RNA (`S599`) (`Yes` / `No`).
 
 - **Experimental ΔΔG (kcal/mol):** Experimentally determined ΔΔG value upon mutation.
 
