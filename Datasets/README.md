@@ -25,7 +25,7 @@
 
 - **CatBoost / ExtraTrees predicted ΔΔG (LOCOV, kcal/mol):** The ΔΔG value predicted by CatBoost (in S1336) or ExtraTrees (in S599), using leave-one-complex-out cross-validation (LOCOV).
 
-- **PremPDI2 / PremPRI2 predicted ΔΔG (kcal/mol):** The change in binding free energy predicted by PremPDI2 (in S1336) or PremPRI2 (in S599).
+- **PremPDI2 / PremPRI2 predicted ΔΔG (kcal/mol):** The ΔΔG value predicted by PremPDI2 (in S1336) or PremPRI2 (in S599).
 
 ## Sequence-based datasets
 
