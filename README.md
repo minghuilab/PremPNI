@@ -67,7 +67,7 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 ### 4. Running PremPNI
 
-`run_prempni.py` predicts the effects of one or more single amino acid substitutions, with each substitution entered on a separate row and predicted independently. `--input` specifies the input file, and `--output` specifies the results directory.
+Use `run_prempni.py` to predict the effects of single amino acid substitutions (one substitution per row, evaluated independently). `--input` specifies the input file, and `--output` specifies the results directory.
 
 #### Protein-DNA example
 
