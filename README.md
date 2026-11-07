@@ -43,7 +43,7 @@ Please create a folder to store input files:
 mkdir -p /prempni/folder_name
 ```
 
-Alternatively, use the predefined directory `/prempni/prempni_input/` to store your input files. This directory already contains the example files `prempni_dna_example_input.tsv` and `prempni_rna_example_input.tsv`.
+Alternatively, use the predefined directory: `/prempni/prempni_input/` for input file storage. This directory already contains the example files `prempni_dna_example_input.tsv` and `prempni_rna_example_input.tsv`.
 
 The reference format for the input file is shown below:
 
