@@ -17,7 +17,7 @@
 
 - **Mutated chain:** The protein chain in which the mutation occurs.
 
-- **Mutation:** The amino acid substitution, given as the wild-type residue, residue position, and mutant residue.
+- **Mutation:** The mutation that occurs.
 
 - **Included in leakage-controlled benchmark set (S441/S260):** Whether the record belongs to S441 (in S1336) or S260 (in S599), indicated by Yes or No.
 
@@ -29,7 +29,7 @@
 
 ## Sequence-based datasets
 
-- **Mutation:** The amino acid substitution, given as the wild-type residue, residue position, and mutant residue.
+- **Mutation:** The mutation that occurs.
 
 - **Wild-type protein sequence:** The protein sequence before mutation, using one-letter amino acid codes.
 
