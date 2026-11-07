@@ -31,7 +31,7 @@
 
 - **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., M1A).
 
-- **Wild-type protein sequence:** The wild-type protein sequence expressed using one-letter amino acid codes.
+- **Wild-type protein sequence:** Amino acid sequence using the one-letter codes for the 20 standard amino acids.
 
 - **DNA sequence / RNA sequence:** The DNA sequence(s) in S1664 or RNA sequence(s) in S1150. Multiple sequences are separated by `&`.
 
