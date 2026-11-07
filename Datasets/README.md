@@ -17,9 +17,9 @@
 
 - **Mutated chain:** The protein chain in which the mutation occurs.
 
-- **Mutation:** The mutation that occurs.
+- **Mutation:** Amino acid substitution in one-letter code (e.g., M1A).
 
-- **Included in leakage-controlled benchmark set (S441/S260):** Whether the record belongs to S441 (in S1336) or S260 (in S599), indicated by Yes or No.
+- `Included in leakage-controlled benchmark set (S441/S260)`: Indicates whether the entry is included in the leakage-controlled subset—`S441` for protein–DNA (`S1336`) or `S260` for protein–RNA (`S599`) (`Yes` / `No`).
 
 - **Experimental ΔΔG (kcal/mol):** Experimentally determined ΔΔG value upon mutation.
 
@@ -29,7 +29,7 @@
 
 ## Sequence-based datasets
 
-- **Mutation:** The mutation that occurs.
+- **Mutation:** Amino acid substitution in one-letter code (e.g., M1A).
 
 - **Wild-type protein sequence:** The protein sequence before mutation, using one-letter amino acid codes.
 

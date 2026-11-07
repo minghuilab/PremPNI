@@ -6,7 +6,7 @@
 
 - Nucleic acid sequence: The DNA or RNA sequence; multiple chains are separated by `&`.
 
-- Mutation: The mutation that occurs.
+- Mutation: Amino acid substitution in one-letter code (e.g., M1A).
 
 - Predicted ΔΔG (kcal/mol): The predicted change in binding free energy upon mutation.
 
