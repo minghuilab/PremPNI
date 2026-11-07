@@ -6,7 +6,7 @@
 
 - Nucleic acid sequence: The DNA or RNA sequence; multiple chains are separated by `&`.
 
-- Mutation: Amino acid substitution in one-letter code (e.g., M1A).
+- Mutation: An amino acid substitution expressed using one-letter amino acid codes (e.g., M1A).
 
 - Predicted ΔΔG (kcal/mol): The predicted change in binding free energy upon mutation.
 
