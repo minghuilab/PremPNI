@@ -55,15 +55,15 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 **Note：**
 
-- **Type:** Interaction type: `Protein-DNA` or `Protein-RNA`.
+- **Type:** Interaction type, either `Protein-DNA` or `Protein-RNA`.
 
 - **Wild-type protein sequence:** Amino acid sequence using the one-letter codes for the 20 standard amino acids.
 
-- **Nucleic acid sequence:** DNA or RNA sequence; separate multiple chains with `&`.
+- **Nucleic acid sequence:** DNA or RNA sequence(s); separate multiple chains with `&`.
 
 - **Mutation:** One amino acid substitution per row, such as `M1A`.
 
-- Different columns in the table are separated by tabs.
+**File format:** Columns must be separated by tabs.
 
 ### 4. Running PremPNI
 
