@@ -4,7 +4,7 @@
 
 - **Wild-type protein sequence:** Amino acid sequence using the one-letter codes for the 20 standard amino acids.
 
-- **Nucleic acid sequence:** The DNA or RNA sequence; multiple chains are separated by `&`.
+- **Nucleic acid sequence:** DNA or RNA sequence(s); separate multiple chains with `&`.
 
 - **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., M1A).
 
