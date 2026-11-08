@@ -17,7 +17,7 @@
 
 - **Mutated chain:** The protein chain in which the mutation occurs.
 
-- **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., M1A).
+- **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., `M1A`).
 
 - **Included in leakage-controlled benchmark set (S441/S260):** Indicates whether the entry is included in the leakage-controlled subset—`S441` for protein–DNA (`S1336`) or `S260` for protein–RNA (`S599`) (`Yes` / `No`).
 
@@ -29,7 +29,7 @@
 
 ## Sequence-based datasets
 
-- **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., M1A).
+- **Mutation:** An amino acid substitution expressed using one-letter amino acid codes (e.g., `M1A`).
 
 - **Wild-type protein sequence:** Amino acid sequence using the one-letter codes for the 20 standard amino acids.
 
