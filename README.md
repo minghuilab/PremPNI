@@ -9,7 +9,7 @@ Users only need to provide the wild-type protein and corresponding DNA or RNA se
 ## Scoring mutations with PremPNI
 
 > [!TIP]
-> We recommend that most users who just want to obtain PremPNI predictions use [PremPNI website](https://lilab.jysw.suda.edu.cn/research/PremPNI/) to obtain scores.
+> For most users, we recommend using the [PremPNI web server](https://lilab.jysw.suda.edu.cn/research/PremPNI/) to obtain predictions.
 
 ## PremPNI Installation and Usage Instructions
 
