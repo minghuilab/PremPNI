@@ -61,7 +61,7 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 - **Nucleic acid sequence:** DNA or RNA sequence(s); separate multiple chains with `&`.
 
-- **Mutation:** One amino acid substitution per row, such as `M1A`.
+- **Mutation:** One amino acid substitution per row, (e.g., `M1A`).
 
 **File format:** Columns must be separated by tabs.
 
