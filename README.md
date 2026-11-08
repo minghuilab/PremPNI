@@ -22,8 +22,8 @@ Docker Installation Guide ([https://docs.docker.com/get-started/get-docker/](htt
 docker pull ghcr.io/minghuilab/prempni
 ```
 
-• Image size: 16.4 GB\
-• Estimated download time (approximate):
+- Image size: 16.4 GB
+- Estimated download time (approximate):
 
 > 100 Mbps: ~20 min\
 > 1 Gbps: ~2 min\
@@ -35,7 +35,7 @@ docker pull ghcr.io/minghuilab/prempni
 docker run -it ghcr.io/minghuilab/prempni bash
 ```
 
-### 3. Preparing Input files and Dictionaries
+### 3. Preparing Input Files and Directories
 
 Please create a folder to store input files:
 
@@ -61,7 +61,7 @@ Protein-RNA	MAVPETRPNHTIYINNLNEKIKKDELKKSLYAIFSQFGQILDILVSRSLKMRGQAFVIFKEVSSATNA
 
 - **Nucleic acid sequence:** DNA or RNA sequence(s); separate multiple chains with `&`.
 
-- **Mutation:** One amino acid substitution per row, (e.g., `M1A`).
+- **Mutation:** One amino acid substitution per row (e.g., `M1A`).
 
 **File format:** Columns must be separated by tabs.
 
